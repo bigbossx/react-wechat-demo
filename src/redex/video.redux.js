@@ -1,18 +1,18 @@
 import axios from 'axios'
+import {Toast} from 'antd-mobile'
 //action
 const FETCH_DATA='FETCH_DATA'
 
 //init state
 const initState={
-    
+    videoList:[]
 }
 
 //reducer
-export function videoList(state=initState,action){
+export function video(state=initState,action){
     switch(action.type){
         case FETCH_DATA:
-            return {...state,isAuth:false,msg:action.msg}
-        
+            return {...state,videoList:action.data}
         default:
             return state
     }
@@ -25,12 +25,12 @@ function fetchData(data){
 //提交修改
 export function fetchVideoData(api,params){
     return dispatch=>{
-        axios.get('http://gank.io/api/data/%E4%BC%91%E6%81%AF%E8%A7%86%E9%A2%91/10/1').then((res)=>{
+        axios.get('/user/video').then((res)=>{
             console.log(res)
             if(res.status==200&&res.data.code==0){
-                // dispatch(fetchData(res.data))
+                dispatch(fetchData(res.data.data))
             }else{
-                // Toast.fail('获取失败，请重试!', 3);
+                Toast.fail('获取数据失败，请重试!', 3);
                 // dispatch(errorMsg(res.data.data))
             }
         })

@@ -3,3 +3,21 @@
     justify-content: center;
     margin: 50px 0;
 }
+.am-tab-bar{
+    background: #fff;
+    z-index: 9998 !important;
+}
+.am-card-header-content{
+    flex: 3;
+}
+.am-card-header-extra{
+    flex: 1;
+}
+.video-react .video-react-big-play-button{
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%,-50%) !important;
+    width: 1.5em !important;
+    border-radius: 50% !important;
+    border:none !important;
+}

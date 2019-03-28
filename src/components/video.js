@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller';
-import VisibilitySensor from 'react-infinite-scroller'
+import VisibilitySensor from 'react-visibility-sensor'
 import { Player } from 'video-react';
 import "./../../node_modules/video-react/dist/video-react.css";
 import {fetchVideoData} from './../redex/video.redux'
+import { WhiteSpace,Card,Flex,Badge } from 'antd-mobile';
 @connect(
   state=>state,
   {fetchVideoData}
@@ -14,24 +15,9 @@ export default class video extends Component {
     super(props);
 
     this.state = {
-      dataSource:[
-        {
-          user:"@岁月荏苒一过往",
-          avatar:"https://p9-dy.bytecdn.cn/aweme/100x100/4a7a001c167000502591.jpeg",
-          title:"时间真的教会了我们很多东西，也拿走了我们很多东西",
-          videoUrl:"https://vd.yinyuetai.com/hc.yinyuetai.com/uploads/videos/common/CB6D01683C65F20CB607C603020F8FC9.mp4?sc=0698f9502e68b21b&br=777&vid=3341816&aid=215&area=ML&vst=0",
-          cover:"https://p1.pstatp.com/large/12f71000b84ca58697e68.jpg"
-        },
-        {
-          user:"@岁月荏苒一过往",
-          avatar:"https://p9-dy.bytecdn.cn/aweme/100x100/4a7a001c167000502591.jpeg",
-          title:"时间真的教会了我们很多东西，也拿走了我们很多东西",
-          videoUrl:"https://vd.yinyuetai.com/hc.yinyuetai.com/uploads/videos/common/CB6D01683C65F20CB607C603020F8FC9.mp4",
-          cover:"https://img1.c.yinyuetai.com/video/mv/190114/0/-M-82f78a2be6447ad5185c602932f6e1b8_240x135.jpg"
-        }
-      ],
       isLoading: true,
     };
+    this.onSensorChange=this.onSensorChange.bind(this)
   }
 
   componentDidMount() {
@@ -53,6 +39,7 @@ export default class video extends Component {
   onEndReached = (event) => {
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
+    console.log("onEndReached")
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
@@ -60,7 +47,13 @@ export default class video extends Component {
     }, 1000);
   }
 
+  onSensorChange(isVisible){
+    console.log(isVisible)
+  }
+
   render() {
+    console.log(this.props)
+    const {videoList}=this.props.video
     const separator = (index) => (
       <div
         key={index}
@@ -73,14 +66,48 @@ export default class video extends Component {
       />
     );
     var renderItems = [];
-        this.state.dataSource.map((item, idx) => {
+        videoList.map((item, idx) => {
           renderItems.push(
-            <Player
+            <VisibilitySensor 
               key={idx}
-              playsInline
-              poster={item.poster}
-              src={item.videoUrl}
-            />
+              onChange={this.onSensorChange}
+              
+            >
+              <div>
+                <Card full>
+                  <Card.Header
+                    title={item.singer}
+                    // thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"
+                    extra={<Badge text={Math.random()>0.5?'MV':"音悦台"} style={{
+                      padding: '3px 13px',
+                      backgroundColor: '#fff',
+                      borderRadius: 15,
+                      color: '#f19736',
+                      border: '1px solid #f19736',
+                    }}/>}
+                  />
+                  <Card.Body>
+                    <Player
+                      key={idx}
+                      playsInline
+                      poster={item.poster}
+                      src={item.videoUrl}
+                    />
+                    <WhiteSpace></WhiteSpace>
+                    <span>{`—${item.name.replace(/^\s+|\s+$/g,"")}`}</span>
+                  </Card.Body>
+                  <Card.Footer content="" extra={
+                    <Flex justify="between" style={{margin:"10px 0px"}}>
+                      <img style={{width:20}} src={require('./img/like-black.png')}/>
+                      <img style={{width:20}} src={require('./img/message-black.png')}/>
+                      <img style={{width:20}} src={require('./img/more.png')}/>
+                    </Flex>
+                  } 
+                  />
+                </Card>  
+                <WhiteSpace></WhiteSpace>
+              </div>
+            </VisibilitySensor>
           );
         });
     return (
