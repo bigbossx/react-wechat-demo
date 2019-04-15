@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller';
-import VisibilitySensor from 'react-visibility-sensor'
-import { Player } from 'video-react';
-import "./../../node_modules/video-react/dist/video-react.css";
+import VideoSensor from './videoSenor'
 import {fetchVideoData} from './../redex/video.redux'
-import { WhiteSpace,Card,Flex,Badge } from 'antd-mobile';
+
 @connect(
   state=>state,
   {fetchVideoData}
@@ -17,7 +15,7 @@ export default class video extends Component {
     this.state = {
       isLoading: true,
     };
-    this.onSensorChange=this.onSensorChange.bind(this)
+    
   }
 
   componentDidMount() {
@@ -47,9 +45,7 @@ export default class video extends Component {
     }, 1000);
   }
 
-  onSensorChange(isVisible){
-    console.log(isVisible)
-  }
+ 
 
   render() {
     console.log(this.props)
@@ -68,46 +64,7 @@ export default class video extends Component {
     var renderItems = [];
         videoList.map((item, idx) => {
           renderItems.push(
-            <VisibilitySensor 
-              key={idx}
-              onChange={this.onSensorChange}
-              
-            >
-              <div>
-                <Card full>
-                  <Card.Header
-                    title={item.singer}
-                    // thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"
-                    extra={<Badge text={Math.random()>0.5?'MV':"音悦台"} style={{
-                      padding: '3px 13px',
-                      backgroundColor: '#fff',
-                      borderRadius: 15,
-                      color: '#f19736',
-                      border: '1px solid #f19736',
-                    }}/>}
-                  />
-                  <Card.Body>
-                    <Player
-                      key={idx}
-                      playsInline
-                      poster={item.poster}
-                      src={item.videoUrl}
-                    />
-                    <WhiteSpace></WhiteSpace>
-                    <span>{`—${item.name.replace(/^\s+|\s+$/g,"")}`}</span>
-                  </Card.Body>
-                  <Card.Footer content="" extra={
-                    <Flex justify="between" style={{margin:"10px 0px"}}>
-                      <img style={{width:20}} src={require('./img/like-black.png')}/>
-                      <img style={{width:20}} src={require('./img/message-black.png')}/>
-                      <img style={{width:20}} src={require('./img/more.png')}/>
-                    </Flex>
-                  } 
-                  />
-                </Card>  
-                <WhiteSpace></WhiteSpace>
-              </div>
-            </VisibilitySensor>
+            <VideoSensor data={item} key={idx} />
           );
         });
     return (
@@ -115,7 +72,7 @@ export default class video extends Component {
           pageStart={0}
           loadMore={this.onEndReached}
           hasMore={true}
-          loader={<div className="loader" key={0}>Loading ...</div>}
+          // loader={<div className="loader" key={0}>Loading ...</div>}
       >
           {
             renderItems

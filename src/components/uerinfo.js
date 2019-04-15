@@ -16,18 +16,20 @@ export default class Userinfo extends React.Component{
         if(publicList.indexOf(pathName)>-1){
             return null
         }
+        
         if(!this.props.user){
+            console.log("______________user undefind__________")
            // Toast.offline('请登录!!!', 0);
             this.props.history.push('/login')
             return
         }
         axios.get('/user/info').then((res)=>{
             if(res.status==200){
-                console.log(res.data)
                 if(res.data.code==0){
                     //已登录
                     this.props.loadUserInfo(res.data.data)
                 }else{
+                    console.log("______________to login__________")
                     this.props.history.push('/login')
                 }
             }

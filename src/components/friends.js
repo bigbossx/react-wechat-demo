@@ -84,7 +84,7 @@ export default class Friends extends React.Component{
                     </Item>
                     <Item
                         thumb={require(`./img/moments.png`)}
-                        onClick={() => {Toast.info('敬请期待',2)}}
+                        onClick={() => {this.props.history.push("/monents")}}
                     >
                     朋友圈
                     </Item>

@@ -2,6 +2,12 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  box-sizing: border-box;
+}
+#nprogress .bar {
+  height:4px;
+  background: linear-gradient(to right,#6a82fb,#fc5c7d) !important; 
+  /* background:red !important; */
 }
 .am-tab-bar{
   position: fixed;
@@ -82,3 +88,169 @@ body {
 .stick-footer .am-list-item .am-input-extra{
   max-height:44px !important ;
 }
+
+.video-layout{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background: rgba(0,0,0,.8);
+z-index: 99;
+}
+
+.monents-container{
+    width:100vw;
+    height: 40vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+    background-image: linear-gradient(45deg,#ffe0b2,#ffccbc);
+    background-image: linear-gradient(45deg,#c5cae9,#b3e5fc);
+    background-image: linear-gradient(45deg,#6d4c41,#d7ccc8);
+    background-image: linear-gradient(45deg,#000,#53346d);
+    background-image: linear-gradient(45deg,#cc2b5e,#753a88);
+    background-image: linear-gradient(45deg,#16a085,#f4d03f);
+    background-image: linear-gradient(45deg,#ff512f,#dd2476);
+    background-image: linear-gradient(45deg,#dc2424,#4a569d);
+    background-image: linear-gradient(45deg,#780206,#061161);
+    background-image: linear-gradient(45deg,#7b4397,#dc2430);
+    background-image: linear-gradient(45deg,#1d4350,#a43931);
+    background-repeat:repeat; 
+}
+.monents-userInfo{
+  margin-bottom: -25px;
+  display: flex;
+  width: 200px;
+  justify-content: space-around;
+  align-items: center;
+}
+.monents-userInfo-avatar{
+  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+.monents-userInfo-name{
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.monents-userInfo-avatar img{
+  width: 100%;
+}
+.post-container{
+  display: flex;
+  padding: 15px;
+  border-bottom: 8px solid #f5f5f5;
+}
+.post-avatar{
+  margin-right: 10px;
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  flex: 0 0 42px;
+}
+.post-avatar img{
+  width: 100%;
+}
+.post-main{
+  flex: 1;
+  padding-top:5px;
+}
+.post-main-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.post-main-description{
+  padding: 10px 0;
+}
+
+.post-main-content{
+  position: relative;
+  background: #f3f3f3;
+  overflow: hidden;
+  margin-right: 5px;
+  margin-bottom: 5px
+}
+.post-main-content img{
+  position: absolute;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+  border-style: none;
+}
+
+.post-main-content-single{
+  width:80%;
+  display: flex;
+}
+.post-main-content-single__item{
+  width: 100%;
+  padding-bottom: 100%;
+}
+
+.post-main-content-double{
+  width:100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.post-main-content-double__item{
+  width: calc(50% - 5px);
+  padding-bottom: 50%;
+}
+
+.post-main-content-three{
+  width:100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.post-main-content-three__item{
+  width: calc(33.33% - 5px);
+  padding-bottom: 33.33%;
+}
+
+.post-other{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.like-container{
+  padding: 5px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #cecaca;
+}
+.commit-container{
+  padding: 5px;
+}
+
+.commit-item{
+  margin-bottom: 5px;
+}
+
+
+
+/* linear-gradient */
+/* background-image: linear-gradient(45deg,#ffe0b2,#ffccbc);
+background-image: linear-gradient(45deg,#c5cae9,#b3e5fc);
+background-image: linear-gradient(45deg,#6d4c41,#d7ccc8);
+background-image: linear-gradient(45deg,#000,#53346d);
+background-image: linear-gradient(45deg,#cc2b5e,#753a88);
+background-image: linear-gradient(45deg,#16a085,#f4d03f);
+background-image: linear-gradient(45deg,#ff512f,#dd2476);
+background-image: linear-gradient(45deg,#dc2424,#4a569d);
+background-image: linear-gradient(45deg,#780206,#061161);
+background-image: linear-gradient(45deg,#7b4397,#dc2430);
+background-image: linear-gradient(45deg,#1d4350,#a43931);
+background-repeat: repeat-x; */
