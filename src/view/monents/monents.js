@@ -2,18 +2,27 @@ import React, { Component } from 'react'
 import { NavBar, Toast } from 'antd-mobile'
 import PostPanel from './../../components/postpanel'
 export default class Monents extends Component {
+
+  constructor (props) {
+    super(props)
+    this.handlePosting = this.handlePosting.bind(this)
+  }
+  handlePosting () {
+    this.props.history.push('/posting')
+  }
+
   render () {
     return (
       <div style={{background: '#fff'}}>
-        <div class='cu-bar bg-black search'>
-          <div class='action'>
-            <span class='cuIcon-back text-xxl'></span>
+        <div className='cu-bar bg-black search fixed-header'>
+          <div className='action'>
+            <span className='cuIcon-back text-xxl'></span>
           </div>
-          <div class='content'>
+          <div className='content'>
             ColorUI
           </div>
-          <div class='action'>
-            <span class='cuIcon-camera text-xxl'></span>
+          <div className='action' onClick={this.handlePosting}>
+            <span className='cuIcon-camera text-xxl'></span>
           </div>
         </div>
         <div className='monents-container'>

@@ -5,7 +5,7 @@ body {
   box-sizing: border-box;
 }
 #nprogress .bar {
-  height:4px;
+  height:2px;
   background: linear-gradient(to right,#6a82fb,#fc5c7d) !important; 
   /* background:red !important; */
 }
@@ -18,8 +18,8 @@ body {
 /* .am-tab-bar-bar{
   z-index: 10000;
 } */
-.fixed-header.am-navbar{
-  position: fixed;
+.fixed-header{
+  position: fixed !important;
   top: 0;
   width: 100%;
   z-index: 99;

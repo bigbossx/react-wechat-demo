@@ -21,7 +21,7 @@ import Userinfo from './components/uerinfo'
 import Chat from './components/chat'
 import EditInfo from './components/editinfo'
 import Search from './components/search'
-
+import Posting from './view/posting/posting'
 import Monents from './view/monents/monents'
 import createHistory from 'history/createHashHistory'
 import NoMatch from './components/nomatch'
@@ -40,6 +40,7 @@ ReactDOM.render(
           <Route path='/chat/:userName' component={Chat}></Route>
           <Route path='/editinfo' component={EditInfo}></Route>
           <Route path='/search' component={Search}></Route>
+          <Route path='/posting' component={Posting}></Route>
           <Route path='/video' component={Home}></Route>
           <Route path='/message' component={Home}></Route>
           <Route path='/friends' component={Home}></Route>
