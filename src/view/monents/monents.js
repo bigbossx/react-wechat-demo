@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
-import { NavBar, Toast } from 'antd-mobile'
+import { Toast } from 'antd-mobile'
 import PostPanel from './../../components/postpanel'
 export default class Monents extends Component {
 
   constructor (props) {
     super(props)
-    this.handlePosting = this.handlePosting.bind(this)
+    this.handleToPosting = this.handleToPosting.bind(this)
+    this.handleGoBack = this.handleGoBack.bind(this)
   }
-  handlePosting () {
+  handleToPosting () {
     this.props.history.push('/posting')
+  }
+  handleGoBack(){
+    this.props.history.goBack()
   }
 
   render () {
     return (
       <div style={{background: '#fff'}}>
         <div className='cu-bar bg-black search fixed-header'>
-          <div className='action'>
+          <div className='action' onClick={this.handleGoBack}>
             <span className='cuIcon-back text-xxl'></span>
           </div>
           <div className='content'>
             ColorUI
           </div>
-          <div className='action' onClick={this.handlePosting}>
+          <div className='action' onClick={this.handleToPosting}>
             <span className='cuIcon-camera text-xxl'></span>
           </div>
         </div>

@@ -25,6 +25,16 @@ export default class Message extends React.Component{
         return (
             <div>
                 <List>
+                    <Item
+                      thumb={require(`./img/robot.png`)}
+                      key={"robot"}
+                      onClick={()=>{
+                          this.props.history.push(`/chat/robot`)
+                      }}
+                    >
+                        Vision_X的小宝贝
+                        <Brief>{"你好"}</Brief>
+                    </Item>
                     {
                         chatList.map((v)=>{
                             v.sort((a,b)=>a.create_time-b.create_time)
@@ -39,12 +49,12 @@ export default class Message extends React.Component{
                                     onClick={()=>{
                                         this.props.history.push(`/chat/${targetId}`)
                                     }}
-                                >   
+                                >
                                     {this.props.chat.userInfo[targetId].name}
                                     <Brief>{v[v.length-1].content}</Brief>
                                 </Item>
                             )
-                            
+
                         })
                     }
                 </List>

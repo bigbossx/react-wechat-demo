@@ -15,7 +15,9 @@ export default class Chat extends React.Component{
         super(props)
         this.state={
             text:'',
-            msg:[]
+            msg:[],
+            robotChatMsg:[],
+            isRobot:false
         }
         this.myRef = React.createRef();
     }
@@ -29,7 +31,11 @@ export default class Chat extends React.Component{
             //this.props.getMsgList()
             this.props.getMsg()
         }
-        console.log(this.props)
+        if(!this.props.chat.userInfo.me){
+            this.setState({
+                isRobot:true
+            })
+        }
         setTimeout(()=>{
             window.dispatchEvent(new Event('resize'))
         },0)
@@ -39,6 +45,7 @@ export default class Chat extends React.Component{
         //     })
         // })
         setTimeout(()=>{
+            console.log(this.myRef)
             if(this.myRef&&this.myRef.current){
                 window.scrollTo(0,this.myRef.current.clientHeight)
             }
@@ -49,16 +56,27 @@ export default class Chat extends React.Component{
 
         //console.log(this.myRef.current.clientHeight)
         setTimeout(()=>{
-            window.scrollTo(0,this.myRef.current.clientHeight)
-        },0)
+            if(this.myRef.current){
+                window.scrollTo(0,this.myRef.current.clientHeight)
+            }
+        },1000)
 
     }
     componentWillUnmount(){
         const to=this.props.match.params.userName
         this.props.readMsg(to)
     }
-    
+
     handleSubmit(){
+        if(this.state.isRobot){
+            axios.post("/robot/robot",{
+                key: "79055f1135cb42a9b175bf658cf46089",
+                info: this.state.text,
+                userid:"123456"
+            }).then(res=>{
+                console.log(res)
+            })
+        }
         const from=this.props.user._id;
         const to=this.props.match.params.userName
         const msg=this.state.text
@@ -68,26 +86,24 @@ export default class Chat extends React.Component{
             text:'',
             showEmoji:false
         })
-        
+
     }
     render(){
         const emoji='😁 😂 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😜 😝 😒 😓 😔 😰 😱 😳 😵 😡 😠 😲 😷 😖 😞 🍇 🍈 🍉 🍊 🍌 🍎 🍏 🍑 🍒 🍓 🍅 🍆 🌽 🍄 🌰 🍞 🍖 🍗 🍔 🍟 🍕 🍳 🍲 🍱 🍘 🍙 🍚 🍛 🍜 🍝 🍠 🍢 🍣 🍤 🍥 🍡 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🍫 🍬 🍭 🍮 🍯 ☕ 🍵 🍶 🍷 🍸 🍹 🍺 🍻 🍴'.split(' ').filter(v=>v).map(v=>({text:v}))
         const me=this.props.match.params.userName
         const userInfo=this.props.chat.userInfo
         const Item=List.Item
-        if(!userInfo[me]){
-            return null
-        }
+
         const currentChatId=[me,this.props.user._id].sort().join('_');
         const filterChatMsg=this.props.chat.chatMsg.filter(v=>v.chatId==currentChatId)
         return (
             <div id="chat-page">
-                <NavBar 
+                <NavBar
                     mode="dark"
                     icon={<Icon type="left" />}
                     className="fixed-header"
                     onLeftClick={() =>{this.props.history.goBack()}}
-                >{userInfo[me].name}</NavBar>
+                >{userInfo[me]&&userInfo[me].name ||"Vision_X的小宝贝"}</NavBar>
                 <div style={{marginBottom:45,marginTop:45}} ref={this.myRef}>
                     {
                         filterChatMsg.sort((a,b)=>a.create_time-b.create_time).map(v=>{
@@ -110,6 +126,30 @@ export default class Chat extends React.Component{
                                         className="chat-me"
                                     >{v.content}</Item>
                                 </List>
+                            )
+                        })
+                    }
+                    {
+                        this.state.robotChatMsg.map(v=>{
+                            return v.from==me?(
+                              <List
+                                key={v._id}
+                              >
+                                  <Item
+                                    multipleLine
+                                    thumb={require(`./img/${userInfo[v.from].avatar}`)}
+                                  >{v.content}</Item>
+                              </List>
+                            ):(
+                              <List
+                                key={v._id}
+                              >
+                                  <Item
+                                    multipleLine
+                                    extra={<img src={require(`./img/${userInfo[v.from].avatar}`)} alt=""/>}
+                                    className="chat-me"
+                                  >{v.content}</Item>
+                              </List>
                             )
                         })
                     }

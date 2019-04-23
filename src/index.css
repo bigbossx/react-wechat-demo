@@ -6,7 +6,7 @@ body {
 }
 #nprogress .bar {
   height:2px;
-  background: linear-gradient(to right,#6a82fb,#fc5c7d) !important; 
+  background: linear-gradient(to right,#6a82fb,#fc5c7d) !important;
   /* background:red !important; */
 }
 .am-tab-bar{
@@ -63,7 +63,7 @@ body {
 }
 .operate .am-button{
   padding:0 10px;
-  font-size: 12px; 
+  font-size: 12px;
 }
 
 #edit .am-image-picker-list {
@@ -77,7 +77,7 @@ body {
   height: auto;
   z-index: 100;
   background: #fff !important;
-  
+
 }
 .stick-footer .am-button {
   padding: 6px;
@@ -120,7 +120,7 @@ z-index: 99;
     background-image: linear-gradient(45deg,#780206,#061161);
     background-image: linear-gradient(45deg,#7b4397,#dc2430);
     background-image: linear-gradient(45deg,#1d4350,#a43931);
-    background-repeat:repeat; 
+    background-repeat:repeat;
 }
 .monents-userInfo{
   margin-bottom: -25px;
@@ -237,6 +237,121 @@ z-index: 99;
 
 .commit-item{
   margin-bottom: 5px;
+}
+
+
+.DrawerPage {
+  position: fixed;
+  width: 100vw;
+  height: calc(100vh - 50px);
+  left: 0vw;
+  transition: all 0.4s;
+  padding-top:50px;
+  background: #fff;
+}
+
+.DrawerPage.show {
+  transform: scale(0.9, 0.9);
+  left: 85vw;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  transform-origin: 0;
+}
+
+.DrawerWindow {
+  position: fixed;
+  width: 85vw;
+  height: 85vh;
+  left: 0;
+  top: 0;
+  transform: scale(0.9, 0.9) translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s;
+  overflow-y: scroll;
+}
+.DrawerWindow-box{
+  margin: 20px;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #fefefe;
+  overflow: hidden;
+}
+.loading-container{
+  position: fixed;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  z-index: 99;
+}
+
+.DrawerWindow.show {
+  transform: scale(1, 1) translateX(0%);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.DrawerClose {
+  position: fixed;
+  width: 40vw;
+  height: 100vh;
+  right: 0;
+  top: 0;
+  color: transparent;
+  padding-top: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.01), #cae0bb99);
+  letter-spacing: 5px;
+  font-size: 25px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s;
+}
+
+.DrawerClose.show {
+  opacity: 1;
+  pointer-events: all;
+  width: 15vw;
+  color: #fff;
+}
+
+.DrawerPage .cu-bar.tabbar .action button.icon {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  margin: 0;
+  display: inline-block;
+}
+
+.DrawerPage .cu-bar.tabbar .action .cu-avatar {
+  margin: 0;
+}
+
+.DrawerPage .nav {
+  flex: 1;
+}
+
+.DrawerPage .nav .cu-item.cur {
+  border-bottom: 0;
+  position: relative;
+}
+
+.DrawerPage .nav .cu-item.cur::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: currentColor;
+  position: absolute;
+  bottom: 10px;
+  border-radius: 5px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.DrawerPage .cu-bar.tabbar .action {
+  flex: initial;
 }
 
 
