@@ -2,7 +2,7 @@
   ColorUi for uniApp  v2.1.4 | by 文晓港 2019年04月14日04:16:13
   仅供学习交流，如作它用所承受的法律责任一概与作者无关
   使用ColorUi开发扩展与插件时，请注明基于ColorUi开发
-  
+
   （QQ交流群：240787041）
 */
 
@@ -1066,8 +1066,8 @@ button.icon.lg {
 	color: var(--white);
 	white-space: nowrap;
 	position: relative;
-	width: 64upx;
-	height: 64upx;
+	width: 32px;
+	height: 32px;
 	background-size: cover;
 	background-position: center;
 	vertical-align: middle;
@@ -2243,36 +2243,35 @@ button.icon.lg {
 
 .cu-chat .cu-item {
 	display: flex;
-	padding: 30upx 30upx 70upx;
+	padding: 10px 10px 35px;
 	position: relative;
 }
 
 .cu-chat .cu-item>.cu-avatar {
-	width: 80upx;
-	height: 80upx;
+	width: 40px;
+	height: 40px;
 }
 
 .cu-chat .cu-item>.main {
-	max-width: calc(100% - 260upx);
-	margin: 0 40upx;
+	width:80%;
 	display: flex;
 	align-items: center;
 }
 
 .cu-chat .cu-item>image {
-	height: 320upx;
+	height: 120px;
 }
 
 .cu-chat .cu-item>.main .content {
-	padding: 20upx;
-	border-radius: 6upx;
+	padding: 0 10px;
+	border-radius: 3px;
 	display: inline-flex;
 	max-width: 100%;
 	align-items: center;
-	font-size: 30upx;
+	font-size: 15px;
 	position: relative;
-	min-height: 80upx;
-	line-height: 40upx;
+	min-height: 40px;
+	line-height: 20px;
 	text-align: left;
 }
 
@@ -2283,50 +2282,50 @@ button.icon.lg {
 
 .cu-chat .cu-item .date {
 	position: absolute;
-	font-size: 24upx;
+	font-size: 12px;
 	color: var(--grey);
-	width: calc(100% - 320upx);
-	bottom: 20upx;
-	left: 160upx;
+	width: calc(100% - 160px);
+	bottom: 10px;
+	left: 80px;
 }
 
 .cu-chat .cu-item .action {
-	padding: 0 30upx;
+	padding: 0 15px;
 	display: flex;
 	align-items: center;
 }
 
 .cu-chat .cu-item>.main .content::after {
 	content: "";
-	top: 27upx;
+	top: 13px;
 	transform: rotate(45deg);
 	position: absolute;
 	z-index: 100;
 	display: inline-block;
 	overflow: hidden;
-	width: 24upx;
-	height: 24upx;
-	left: -12upx;
+	width: 12px;
+	height: 12px;
+	left: -6px;
 	right: initial;
 	background-color: inherit;
 }
 
 .cu-chat .cu-item.self>.main .content::after {
 	left: auto;
-	right: -12upx;
+	right: -6px;
 }
 
 .cu-chat .cu-item>.main .content::before {
 	content: "";
-	top: 30upx;
+	top: 15px;
 	transform: rotate(45deg);
 	position: absolute;
 	z-index: -1;
 	display: inline-block;
 	overflow: hidden;
-	width: 24upx;
-	height: 24upx;
-	left: -12upx;
+	width: 12px;
+	height: 12px;
+	left: -6px;
 	right: initial;
 	background-color: inherit;
 	filter: blur(5upx);
@@ -2340,7 +2339,7 @@ button.icon.lg {
 
 .cu-chat .cu-item.self>.main .content::before {
 	left: auto;
-	right: -12upx;
+	right: -6px;
 }
 
 .cu-chat .cu-item.self {
@@ -2350,13 +2349,13 @@ button.icon.lg {
 
 .cu-chat .cu-info {
 	display: inline-block;
-	margin: 20upx auto;
-	font-size: 24upx;
-	padding: 8upx 12upx;
+	margin: 10px auto;
+	font-size: 12px;
+	padding: 4px 6px;
 	background-color: rgba(0, 0, 0, 0.2);
-	border-radius: 6upx;
+	border-radius: 3px;
 	color: var(--white);
-	max-width: 400upx;
+	max-width: 200px;
 	line-height: 1.4;
 }
 

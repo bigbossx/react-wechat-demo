@@ -3,7 +3,7 @@ import { Button, ImagePicker, WhiteSpace, TextareaItem, List, ActivityIndicator,
 
 const Item = List.Item
 const Brief = Item.Brief
-export default class posting extends Component {
+export default class Posting extends Component {
 
   constructor (props) {
     super(props)
@@ -59,6 +59,11 @@ export default class posting extends Component {
   }
 
   showPosition = (position) => {
+    var point = new window.BMap.Point(position.coords.longitude, position.coords.latitude);
+    var myGeo = new window.BMap.Geocoder();
+    myGeo.getLocation(point, function (result) {
+      alert(result.addressComponents.province + ' ' + result.addressComponents.city);
+    })
     Toast.success(`纬度: ${position.coords.latitude} 经度:${position.coords.longitude}`)
   }
 

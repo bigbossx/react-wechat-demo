@@ -1,6 +1,6 @@
 import axios from 'axios'
 import io from 'socket.io-client'
-const socket=io('ws://111.230.91.125:8081')
+const socket=io('ws://127.0.0.1:8081')
 const FRIEND_LIST='FRIEND_LIST'
 const REQUEST_GET='REQUEST_GET'
 const REQUEST_LIST='REQUEST_LIST'

@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 import axios from 'axios'
-const socket=io('ws://111.230.91.125:8081')
+const socket=io('ws://127.0.0.1:8081')
 
 const MSG_LIST='MSG_LIST'
 const MSG_GET='MSG_GET'

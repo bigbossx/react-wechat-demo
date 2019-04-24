@@ -29,7 +29,7 @@ export default class Message extends React.Component{
                       thumb={require(`./img/robot.png`)}
                       key={"robot"}
                       onClick={()=>{
-                          this.props.history.push(`/chat/robot`)
+                          this.props.history.push(`/robot`)
                       }}
                     >
                         Vision_X的小宝贝

@@ -1,37 +1,36 @@
 import React from "react"
-import io from "socket.io-client"
 import axios from "axios"
 import { List, InputItem, Button, NavBar, Icon, Grid, Toast } from "antd-mobile"
 import { connect } from "react-redux"
 import { loadUserInfo } from "./../redex/user.redux"
-import { getMsgList, sendMsg, getMsg, readMsg } from "./../redex/chat.redux"
 
-const socket = io("ws://127.0.0.1:8081")
 @connect(
   state => state,
-  { getMsgList, sendMsg, getMsg, readMsg, loadUserInfo },
+  { loadUserInfo },
 )
-export default class Chat extends React.Component {
+export default class ChatWithRobot extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       text: "",
-      msg: [],
+      robotChatMsg: [],
     }
     this.myRef = React.createRef()
   }
 
   componentWillMount () {
-    if (!this.props.chat.chatMsg.length) {
-      this.props.getMsgList()
-    }
+
   }
 
   componentDidMount () {
-    if (!this.props.chat.chatMsg.length) {
-      this.props.getMsg()
-    }
-
+    this.setState({
+      robotChatMsg: this.state.robotChatMsg.concat({
+        message: "你好呀！",
+        from: "robot",
+        timestamp: new Date().getTime(),
+        date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+      }),
+    })
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"))
     }, 0)
@@ -55,33 +54,46 @@ export default class Chat extends React.Component {
   }
 
   componentWillUnmount () {
-    const to = this.props.match.params.userName
-    this.props.readMsg(to)
+
   }
 
   handleSubmit () {
-
-    const from = this.props.user._id
-    const to = this.props.match.params.userName
-    const msg = this.state.text
-    this.props.sendMsg({ from, to, msg })
+    let ask = {
+      message: this.state.text,
+      from: "user",
+      timestamp: new Date().getTime(),
+      date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+    }
     this.setState({
-      text: "",
-      showEmoji: false,
+      robotChatMsg: this.state.robotChatMsg.concat(ask),
+      showEmoji:false
+    })
+    axios.post("/openapi/api", {
+      key: "79055f1135cb42a9b175bf658cf46089",
+      info: this.state.text,
+      userid: "123456",
+    }).then(res => {
+      if (res.data.code === 100000) {
+        let result = {
+          message: res.data.text,
+          from: "robot",
+          timestamp: new Date().getTime(),
+          date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+        }
+        this.setState({
+          robotChatMsg: this.state.robotChatMsg.concat(result),
+          text: "",
+        })
+      }
     })
 
   }
 
   render () {
     const emoji = "😁 😂 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😜 😝 😒 😓 😔 😰 😱 😳 😵 😡 😠 😲 😷 😖 😞 🍇 🍈 🍉 🍊 🍌 🍎 🍏 🍑 🍒 🍓 🍅 🍆 🌽 🍄 🌰 🍞 🍖 🍗 🍔 🍟 🍕 🍳 🍲 🍱 🍘 🍙 🍚 🍛 🍜 🍝 🍠 🍢 🍣 🍤 🍥 🍡 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🍫 🍬 🍭 🍮 🍯 ☕ 🍵 🍶 🍷 🍸 🍹 🍺 🍻 🍴".split(" ").filter(v => v).map(v => ({ text: v }))
-    const me = this.props.match.params.userName
-    const userInfo = this.props.chat.userInfo
-    const Item = List.Item
-    if(userInfo[me].name){
-      return false
-    }
-    const currentChatId = [me, this.props.user._id].sort().join("_")
-    const filterChatMsg = this.props.chat.chatMsg.filter(v => v.chatId == currentChatId)
+
+    let { user } = this.props
+
     return (
       <div id="chat-page">
         <NavBar
@@ -89,29 +101,39 @@ export default class Chat extends React.Component {
           icon={<Icon type="left" />}
           className="fixed-header"
           onLeftClick={() => {this.props.history.goBack()}}
-        >{userInfo[me].name}</NavBar>
+        >Vision_X的小宝贝</NavBar>
         <div style={{ marginBottom: 45, marginTop: 45 }} ref={this.myRef}>
+          <div className="chat-tip">
+            <span className="cuIcon-warnfill text-red text-xs"></span>
+            <span className="text-white text-xs">此聊天不会加入数据库哟</span>
+          </div>
           {
-            filterChatMsg.sort((a, b) => a.create_time - b.create_time).map(v => {
-              return v.from == me ? (
-                <List
-                  key={v._id}
-                >
-                  <Item
-                    multipleLine
-                    thumb={require(`./img/${userInfo[v.from].avatar}`)}
-                  >{v.content}</Item>
-                </List>
+            this.state.robotChatMsg.length > 0 && this.state.robotChatMsg.map(v => {
+              return v.from === "robot" ? (
+                <div className="chat-container" key={v.timestamp}>
+                  <div className="chat-main">
+                    <div className="chat-avatar">
+                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"}/>
+                    </div>
+                    <div className="chat-content triangle-left bg-other">
+                      <span className="text-df">{v.message}</span>
+                    </div>
+                  </div>
+                  <div className="chat-date text-xs">{v.date}</div>
+                </div>
+
               ) : (
-                <List
-                  key={v._id}
-                >
-                  <Item
-                    multipleLine
-                    extra={<img src={require(`./img/${userInfo[v.from].avatar}`)} alt="" />}
-                    className="chat-me"
-                  >{v.content}</Item>
-                </List>
+                <div className="chat-container chat-self" key={v.timestamp}>
+                  <div className="chat-main main-self">
+                    <div className="chat-content triangle-right bg-self">
+                      <span className="text-df">{v.message}</span>
+                    </div>
+                    <div className="chat-avatar">
+                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"}/>
+                    </div>
+                  </div>
+                  <div className="chat-date text-xs">{v.date}</div>
+                </div>
               )
             })
           }
@@ -126,7 +148,16 @@ export default class Chat extends React.Component {
                   text: v,
                 })
               }}
-              onVirtualKeyboardConfirm={() => this.handleSubmit()}
+              onFocus={()=>{
+                this.setState({
+                  showEmoji:false
+                })
+              }}
+              onKeyPress={(e) => {
+                if (e.charCode === 13) {
+                  this.handleSubmit()
+                }
+              }}
               extra={
                 <div className='emoji'>
                                     <span style={{ marginRight: 10, fontSize: 20 }}

@@ -22,6 +22,7 @@ import Chat from './components/chat'
 import EditInfo from './components/editinfo'
 import Search from './components/search'
 import Posting from './view/posting/posting'
+import RobotChat from './components/chatWithRobot'
 import Monents from './view/monents/monents'
 import createHistory from 'history/createHashHistory'
 import NoMatch from './components/nomatch'
@@ -38,6 +39,7 @@ ReactDOM.render(
           <Route path='/register' component={Register}></Route>
           <Route path='/login' component={Login}></Route>
           <Route path='/chat/:userName' component={Chat}></Route>
+          <Route path='/robot/' component={RobotChat}></Route>
           <Route path='/editinfo' component={EditInfo}></Route>
           <Route path='/search' component={Search}></Route>
           <Route path='/posting' component={Posting}></Route>

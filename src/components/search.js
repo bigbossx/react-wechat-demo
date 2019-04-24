@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import {SearchBar,NavBar,Icon,Card,WhiteSpace,ActionSheet,List,Button,Toast} from 'antd-mobile'
 import {connect} from 'react-redux'
 import {sendAddRequest,getAddRequest,getAddRequestList,ignoreRequest,agreeRequest,getFriendsList} from './../redex/friends.redux'
-const socket=io('ws://111.230.91.125:8081')
+const socket=io('ws://127.0.0.1:8081')
 @connect(
     state=>state,
     {sendAddRequest,getAddRequest,getAddRequestList,ignoreRequest,agreeRequest,getFriendsList}
@@ -63,7 +63,7 @@ export default class Search extends React.Component{
                     showTip:false,
                     showNoResult:true
                 })
-            }         
+            }
         })
     }
     showActionSheet = (v) => {
@@ -134,7 +134,7 @@ export default class Search extends React.Component{
         const Brief = Item.Brief;
         return (
             <div>
-                <NavBar 
+                <NavBar
                         mode="dark"
                         icon={<Icon type="left" />}
                         className="fixed-header"
@@ -142,8 +142,8 @@ export default class Search extends React.Component{
                 >添加朋友</NavBar>
                 <SearchBar
                     value={this.state.value}
-                    placeholder="Search" 
-                    maxLength={8} 
+                    placeholder="Search"
+                    maxLength={8}
                     style={{marginTop:45}}
                     onSubmit={()=>{this.handleSubmit()}}
                     onChange={this.onChange}
@@ -174,10 +174,10 @@ export default class Search extends React.Component{
                 {
                     this.props.friends.requestList.length?this.props.friends.requestList.filter(v=>v.from!=this.props.user._id).sort((a,b)=>b.create_time-a.create_time).map((v,index)=>(
                         <div key={index} className='operate-list'>
-                            <List 
-                                
+                            <List
+
                             >
-                                <Item multipleLine 
+                                <Item multipleLine
                                     //thumb={require(`./img/${v.avatar}`)}
                                     extra={
                                         v.ignore?<div className="operate"><Button type="" disabled>已忽略</Button></div>:
