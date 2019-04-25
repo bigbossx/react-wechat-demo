@@ -1,9 +1,10 @@
 import React from "react"
 import axios from "axios"
-import { List, InputItem, Button, NavBar, Icon, Grid, Toast } from "antd-mobile"
+import { List, InputItem, Button, NavBar, Icon, Grid, Toast, Modal, Popover, Checkbox } from "antd-mobile"
 import { connect } from "react-redux"
 import { loadUserInfo } from "./../redex/user.redux"
 
+const CheckboxItem = Checkbox.CheckboxItem
 @connect(
   state => state,
   { loadUserInfo },
@@ -14,6 +15,11 @@ export default class ChatWithRobot extends React.Component {
     this.state = {
       text: "",
       robotChatMsg: [],
+      popoverVisible: false,
+      showOptions: [
+        { key: 0, label: "显示用户昵称", checked: true },
+        { key: 1, label: "显示发送日期", checked: false },
+      ],
     }
     this.myRef = React.createRef()
   }
@@ -23,14 +29,22 @@ export default class ChatWithRobot extends React.Component {
   }
 
   componentDidMount () {
-    this.setState({
-      robotChatMsg: this.state.robotChatMsg.concat({
-        message: "你好呀！",
-        from: "robot",
-        timestamp: new Date().getTime(),
-        date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
-      }),
-    })
+    let localData = this.getLocalStorage()
+    if (!localData) {
+      this.setState({
+        robotChatMsg: this.state.robotChatMsg.concat({
+          message: "你好呀！",
+          from: "robot",
+          timestamp: new Date().getTime(),
+          date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+        }),
+      })
+    } else {
+      this.setState({
+        robotChatMsg: localData,
+      })
+    }
+
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"))
     }, 0)
@@ -57,16 +71,28 @@ export default class ChatWithRobot extends React.Component {
 
   }
 
+  optionsChange = (key) => {
+    this.state.showOptions[key].checked = !this.state.showOptions[key].checked
+    this.setState({
+      showOptions: this.state.showOptions,
+    })
+  }
+  onSelect = () => {
+    this.setState({
+      showOptions: false,
+    })
+  }
+
   handleSubmit () {
     let ask = {
       message: this.state.text,
       from: "user",
       timestamp: new Date().getTime(),
-      date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+      date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
     }
     this.setState({
       robotChatMsg: this.state.robotChatMsg.concat(ask),
-      showEmoji:false
+      showEmoji: false,
     })
     axios.post("/openapi/api", {
       key: "79055f1135cb42a9b175bf658cf46089",
@@ -78,7 +104,7 @@ export default class ChatWithRobot extends React.Component {
           message: res.data.text,
           from: "robot",
           timestamp: new Date().getTime(),
-          date:`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+          date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
         }
         this.setState({
           robotChatMsg: this.state.robotChatMsg.concat(result),
@@ -87,6 +113,13 @@ export default class ChatWithRobot extends React.Component {
       }
     })
 
+  }
+
+  setLocalStorage = (data) => {
+    window.localStorage.setItem("chat", JSON.stringify(data))
+  }
+  getLocalStorage = () => {
+    return JSON.parse(window.localStorage.getItem("chat"))
   }
 
   render () {
@@ -100,7 +133,50 @@ export default class ChatWithRobot extends React.Component {
           mode="dark"
           icon={<Icon type="left" />}
           className="fixed-header"
-          onLeftClick={() => {this.props.history.goBack()}}
+          onLeftClick={() => {
+            Modal.alert("提示", "是否将聊天加入本地缓存？", [
+              { text: "算了", onPress: () => this.props.history.goBack() },
+              {
+                text: "好的", onPress: () => {
+                  this.setLocalStorage(this.state.robotChatMsg)
+                  this.props.history.goBack()
+                },
+              },
+            ])
+          }}
+          rightContent={
+            <Popover mask
+                     overlayClassName="fortest"
+                     overlayStyle={{ color: "currentColor", position: "fixed" }}
+                     visible={this.state.popoverVisible}
+                     overlay={[
+                       ...this.state.showOptions.map(item => {
+                         return (
+                           <CheckboxItem key={item.key} checked={item.checked}
+                                         onChange={() => this.optionsChange(item.key)}>
+                             {item.label}
+                           </CheckboxItem>
+                         )
+                       }),
+                     ]}
+                     align={{
+                       overflow: { adjustY: 0, adjustX: 0 },
+                       offset: [-10, 0],
+                     }}
+                     onSelect={this.onSelect}
+            >
+              <div style={{
+                height: "100%",
+                padding: "0 15px",
+                marginRight: "-15px",
+                display: "flex",
+                alignItems: "center",
+              }}
+              >
+                <Icon type="ellipsis" />
+              </div>
+            </Popover>
+          }
         >Vision_X的小宝贝</NavBar>
         <div style={{ marginBottom: 45, marginTop: 45 }} ref={this.myRef}>
           <div className="chat-tip">
@@ -113,26 +189,46 @@ export default class ChatWithRobot extends React.Component {
                 <div className="chat-container" key={v.timestamp}>
                   <div className="chat-main">
                     <div className="chat-avatar">
-                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"}/>
+                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"} />
                     </div>
-                    <div className="chat-content triangle-left bg-other">
-                      <span className="text-df">{v.message}</span>
+                    <div className="chat-content main-other">
+                      {
+                        this.state.showOptions[0].checked &&
+                        <span className="text-xs text-gray">Vision_X的小宝贝</span>
+                      }
+
+                      <div className="message-content triangle-left bg-other">
+                        <span className="text-df">{v.message}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="chat-date text-xs">{v.date}</div>
+                  {
+                    this.state.showOptions[1].checked &&
+                    <div className="chat-date text-xs">{v.date}</div>
+                  }
                 </div>
 
               ) : (
                 <div className="chat-container chat-self" key={v.timestamp}>
-                  <div className="chat-main main-self">
-                    <div className="chat-content triangle-right bg-self">
-                      <span className="text-df">{v.message}</span>
+                  <div className="chat-main">
+                    <div className="chat-content main-self">
+                      {
+                        this.state.showOptions[0].checked &&
+                        <span className="text-xs text-gray">用户名</span>
+                      }
+
+                      <div className="message-content triangle-right bg-self">
+                        <span className="text-df">{v.message}</span>
+                      </div>
                     </div>
                     <div className="chat-avatar">
-                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"}/>
+                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"} />
                     </div>
                   </div>
-                  <div className="chat-date text-xs">{v.date}</div>
+                  {
+                    this.state.showOptions[1].checked &&
+                    <div className="chat-date text-xs">{v.date}</div>
+                  }
                 </div>
               )
             })
@@ -148,9 +244,9 @@ export default class ChatWithRobot extends React.Component {
                   text: v,
                 })
               }}
-              onFocus={()=>{
+              onFocus={() => {
                 this.setState({
-                  showEmoji:false
+                  showEmoji: false,
                 })
               }}
               onKeyPress={(e) => {

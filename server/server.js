@@ -25,12 +25,12 @@ io.on('connection', function (socket) {
     })
   })
   socket.on('sendAddRequest', function (data) {
-    const {userId, to, avatar, userName, myName, myAvatar} = data
+    const {userId, to} = data
     let create_time = new Date().getTime()
     // 将数据存入对方信息列表中
     User.findOne({_id: to}, (err, doc) => {
       if (doc) {
-        doc.friends.push({userId,from: userId,avatar: myAvatar,userName: myName,create_time})
+        doc.friends.push({userId,from: userId,create_time})
         doc.save((err2, doc2) => {
         })
       }
@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
     // 将数据存入自己信息列表中
     User.findOne({_id: userId}, (err, doc) => {
       if (doc) {
-        doc.friends.push({userId: to,from: userId,avatar,userName,create_time})
+        doc.friends.push({userId: to,from: userId,create_time})
         doc.save((err2, doc2) => {
           io.emit('getAddRequest', Object.assign({}, data, {create_time: create_time}))
         })
