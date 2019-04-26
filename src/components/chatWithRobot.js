@@ -189,7 +189,7 @@ export default class ChatWithRobot extends React.Component {
                 <div className="chat-container" key={v.timestamp}>
                   <div className="chat-main">
                     <div className="chat-avatar">
-                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"} />
+                      <img src={"http://pqgrbj9dn.bkt.clouddn.com/robot.png"} />
                     </div>
                     <div className="chat-content main-other">
                       {
@@ -222,7 +222,7 @@ export default class ChatWithRobot extends React.Component {
                       </div>
                     </div>
                     <div className="chat-avatar">
-                      <img src={"https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg"} />
+                      <img src={"http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
                     </div>
                   </div>
                   {

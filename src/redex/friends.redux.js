@@ -13,7 +13,7 @@ const initState={
 export function friends(state=initState,action){
     switch(action.type){
         case FRIEND_LIST:
-            return {...state,friendsList:action.payload.filter((v)=>v.agree)}
+            return {...state,friendsList:action.payload}
         case REQUEST_GET:
             return {...state,requestList:[...state.requestList,action.payload],unreadrequest:state.unreadrequest+1}
         case REQUEST_LIST:
@@ -58,7 +58,7 @@ export function getAddRequest(){
 export function getAddRequestList(){
     return (dispatch,getState)=>{
         //console.log('我执行了')
-        axios.get('/user/friendslist').then((res)=>{
+        axios.get('/user/friendsAllList').then((res)=>{
             if(res.status==200&&res.data.code==0){
                 const id=getState().user._id
                 dispatch(requestListAction(res.data.data,id))
@@ -73,7 +73,7 @@ export function sendAddRequest({from,to}){
 }
 export function getFriendsList(){
     return dispatch=>{
-        axios.get('/user/friendslist').then((res)=>{
+        axios.get('/user/friendsAgreeList').then((res)=>{
             if(res.status==200&&res.data.code==0){
                 dispatch(friendsListAction(res.data.data))
             }

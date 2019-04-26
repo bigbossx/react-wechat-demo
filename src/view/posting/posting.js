@@ -1,4 +1,6 @@
 import React, { Component } from "react"
+import axios from "axios"
+import { connect } from "react-redux"
 import {
   Button,
   ImagePicker,
@@ -9,25 +11,39 @@ import {
   Toast,
   Badge,
   Modal,
+  Checkbox,
 } from "antd-mobile"
+import { getFriendsList } from "../../redex/friends.redux"
 
+const CheckboxItem = Checkbox.CheckboxItem
 const Item = List.Item
 const Brief = Item.Brief
+@connect(
+  state => state,
+  { getFriendsList },
+)
 export default class Posting extends Component {
 
   constructor (props) {
     super(props)
     this.handlePosting = this.handlePosting.bind(this)
-    this.handleOpenDrawer = this.handleOpenDrawer.bind(this)
     this.handleCloseDrawer = this.handleCloseDrawer.bind(this)
     this.state = {
       drawerModalShow: false,
       files: [],
       description: "",
       geolocationDisable: false,
-      friends: [],
+      geolocation: "",
       loading: false,
+      canSeeUser: [],
+      callUser: [],
+      canSeeUserShow: false,
+      callUserShow: false,
     }
+  }
+
+  componentDidMount () {
+    this.props.getFriendsList()
   }
 
   randomSelectedImage = (number) => {
@@ -99,12 +115,17 @@ export default class Posting extends Component {
   }
 
   handlePosting () {
-
-  }
-
-  handleOpenDrawer () {
-    this.setState({
-      drawerModalShow: true,
+    console.log(this.state)
+    axios.post("/user/posting", {
+      description: this.state.description,
+      canSeeUser: this.state.canSeeUser,
+      callUser: this.state.callUser,
+      geolocation: this.state.geolocation,
+      imageLists: this.state.files,
+    }).then(res => {
+      if(res.code===0){
+        Toast.success("success")
+      }
     })
   }
 
@@ -112,6 +133,8 @@ export default class Posting extends Component {
     this.setState({
       drawerModalShow: false,
       geolocationDisable: false,
+      canSeeUserShow: false,
+      callUserShow: false,
     })
   }
 
@@ -125,10 +148,20 @@ export default class Posting extends Component {
       description: event,
     })
   }
+  onCheckedChange = (userId) => {
+    if (this.state.canSeeUserShow) {
+      this.setState({
+        canSeeUser: [...new Set([...this.state.canSeeUserShow, userId])],
+      })
+    } else {
+      this.setState({
+        callUser: [...new Set([...this.state.callUser, userId])],
+      })
+    }
+  }
   getLocation = () => {
-    this.handleOpenDrawer()
     if (navigator.geolocation) {
-      this.setState({ loading: true })
+      this.setState({ loading: true, drawerModalShow: true })
       navigator.geolocation.getCurrentPosition(this.showPosition, this.showError)
     } else {
       Toast.fail("获取失败", 2)
@@ -150,6 +183,7 @@ export default class Posting extends Component {
   }
 
   render () {
+    const friendsList = this.props.friends.friendsList
     return (
       <div>
         <div className={`DrawerPage ${this.state.drawerModalShow && "show"}`}>
@@ -209,18 +243,40 @@ export default class Posting extends Component {
                 onClick={() => {this.getLocation()}}
               >所在位置</Item>
               <Item
-                thumb={<img style={{ width: 20, height: 20 }} src={require("./../../components/img/user-black.png")} />}
-                onClick={() => {this.handleOpenDrawer()}}
+                thumb={<img style={{ width: 20, height: 20 }}
+                            src={this.state.canSeeUser.length > 0 ? require("./../../components/img/user-active.png") : require("./../../components/img/user-black.png")} />}
+                onClick={() => {
+                  this.setState({
+                    canSeeUserShow: true,
+                    drawerModalShow: true,
+                  })
+                }}
+                extra={<span
+                  style={{ color: "#8df710" }}>{this.state.canSeeUser.length > 0 && this.state.canSeeUser.length}</span>}
                 arrow="horizontal"
               >
-                谁可以看
+                {
+                  this.state.canSeeUser.length > 0 ?
+                    <span style={{ color: "#8df710" }}>谁可以看</span> : "谁可以看"
+                }
               </Item>
               <Item
-                thumb={<img style={{ width: 20, height: 20 }} src={require("./../../components/img/@.png")} />}
-                onClick={() => {this.handleOpenDrawer()}}
+                thumb={<img style={{ width: 20, height: 20 }}
+                            src={this.state.callUser.length > 0 ? require("./../../components/img/@-active.png") : require("./../../components/img/@.png")} />}
+                onClick={() => {
+                  this.setState({
+                    callUserShow: true,
+                    drawerModalShow: true,
+                  })
+                }}
+                extra={<span
+                  style={{ color: "#8df710" }}>{this.state.callUser.length > 0 && this.state.callUser.length}</span>}
                 arrow="horizontal"
               >
-                提醒谁看
+                {
+                  this.state.callUser.length > 0 ?
+                    <span style={{ color: "#8df710" }}>提醒谁看</span> : "提醒谁看"
+                }
               </Item>
             </List>
           </div>
@@ -236,13 +292,28 @@ export default class Posting extends Component {
             </div>
           }
 
-          {
-            this.state.geolocationDisable &&
-            <div className="DrawerWindow-box">
-              <span style={{ color: "red" }}>获取失败，可能由于您非https网络，出于安全考虑，当前浏览器无法为您提供位置服务，所以无法正常使用geolocation API</span>
-            </div>
-          }
-
+          <div className="DrawerWindow-box">
+            {
+              this.state.geolocationDisable &&
+              <span style={{ color: "red", margin: 10, display: "inline-block" }}>获取失败，可能由于您非https网络，出于安全考虑，当前浏览器无法为您提供位置服务，所以无法正常使用geolocation API</span>
+            }
+            {
+              (this.state.callUserShow || this.state.canSeeUserShow && friendsList.length > 0) && friendsList.map((item) => {
+                return (
+                  <List key={item._id}
+                  >
+                    <CheckboxItem
+                      onChange={() => this.onCheckedChange(item._id)}
+                    >
+                      <img style={{ borderRadius: 3, marginRight: 5 }}
+                           src={"http://pqgrbj9dn.bkt.clouddn.com/04cbe76439caffdc13a79a7ee27a5d25.jpg"} />
+                      {item.userName}
+                    </CheckboxItem>
+                  </List>
+                )
+              })
+            }
+          </div>
         </div>
       </div>
 

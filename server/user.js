@@ -5,6 +5,7 @@ const model = require('./model')
 const User = model.getModel('user')
 const Chat = model.getModel('chat')
 const Video = model.getModel('video')
+const Moments = model.getModel('moments')
 const _filter = {'pwd': 0,'__v': 0} // 过滤返回doc中的用户密码
 function md5Pwd (pwd) {
   // 在MD5的基础上使用更深的加密：加盐加密
@@ -23,12 +24,34 @@ Router.get('/list', (req, res) => {
     }
   })
 })
-// Router.get('/list',(req,res)=>{
-//     return res.json({
-//         code:0,
-//         data:'HELLO'
-//     })
-// })
+
+
+//发帖
+Router.post('/posting', (req, res) => {
+  const {userId} = req.cookies
+  const {description,canSeeUser,callUser,geolocation,imageLists} = req.body
+  Moments.create({
+    userId,
+    description,
+    canSeeUser,
+    callUser,
+    geolocation,
+    imageLists
+  }, (err, doc) => {
+    if (err) {
+      return res.json({
+        code: 1,
+        msg: err
+      })
+    }else {
+      return res.json({
+        code: 0,
+        msg: 'success'
+      })
+    }
+  })
+})
+
 // 视频接口
 Router.get('/video', (req, res) => {
   Video.find({}, (err, doc) => {
@@ -47,7 +70,7 @@ Router.get('/video', (req, res) => {
   })
 })
 // 返回用户好友列表
-Router.get('/friendslist', (req, res) => {
+Router.get('/friendsAllList', (req, res) => {
   const {userId} = req.cookies
   User.findOne({_id: userId}, (err, doc) => {
     if (err) {
@@ -60,6 +83,37 @@ Router.get('/friendslist', (req, res) => {
       return res.json({
         code: 0,
         data: doc.friends
+      })
+    }
+  })
+})
+// 返回用户好友列表(已同意)
+Router.get("/friendsAgreeList", (req, res) => {
+  const { userId } = req.cookies
+  User.findOne({ _id: userId }, (err, doc) => {
+    if (err) {
+      return res.json({
+        code: 1,
+        data: "意外错误",
+      })
+    }
+    if (doc) {
+      let friendsIds = doc.friends.filter(item => item.agree).map(({ userId }) => {
+        return userId
+      })
+      User.find({ "_id": { $in: friendsIds } }, (err1, doc1) => {
+        if (err1) {
+          return res.json({
+            code: 1,
+            data: "意外错误",
+          })
+        }
+        if (doc1) {
+          return res.json({
+            code: 0,
+            data: doc1,
+          })
+        }
       })
     }
   })
@@ -175,6 +229,7 @@ Router.post('/register', (req, res) => {
     })
   })
 })
+
 // 返回用户的登录状态
 Router.get('/info', (req, res) => {
   // 用户有没有cookie

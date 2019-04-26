@@ -56,18 +56,7 @@ server.listen(8081, () => {
 //   console.log(err)
 // })
 
-// User.create({
-//     userName:'vision',
-//     age:20
-// },(err,doc)=>{
-//     if(!err){
-//         console.log(doc)
-//     }
-// })
 
-// app.get('/',(req,res)=>{
-//     res.send("<h1>hello</h1>")
-// })
 app.get('/data/user', (req, res) => {
   User.find({}, (err, doc) => {
     if (!err) {
@@ -82,20 +71,4 @@ app.get('/data/video', (req, res) => {
     }
   })
 })
-// app.get('/del',(req,res)=>{
-//     User.remove({userName:'vision'},(err,doc)=>{
-//         if(!err){
-//             res.json({
-//                 code:0,
-//                 msg:'del suc'
-//             })
-//         }
-//     })
-// })
-// app.get('/update',(req,res)=>{
-//     User.update({userName:'vision'},{'$set':{age:30}},(err,doc)=>{
-//         if(!err){
-//             res.json(doc)
-//         }
-//     })
-// })
+
