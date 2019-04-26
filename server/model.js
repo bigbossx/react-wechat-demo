@@ -14,7 +14,7 @@ const models = {
     "desc": { type: String },
     "address": { type: String },
     "friends": [{
-      "userId": { type: String, require: true },
+      "userId": { type: mongoose.Schema.ObjectId, require: true },
       "from": { type: String, require: true },
       "agree": { type: Boolean, default: false },
       "unread": { type: Boolean, default: false },
@@ -39,7 +39,7 @@ const models = {
     "poster": { type: String, require: true },
   },
   moments: {
-    "userId": { type: String, require: true },
+    "userId": { type: mongoose.Schema.ObjectId, require: true },
     "description": { type: String, require: false },
     "geolocation": { type: String, require: false },
     "canSeeUser": { type: Array, require: false },
@@ -51,9 +51,9 @@ const models = {
     "likeUser": { type: Array, require: false },
     "comment": [{
       "timeStamp": { type: Number, require: false },
-      "commentId": { type: String, require: false },
+      "commentId": { type: mongoose.Schema.ObjectId, require: false },
       "commentName": { type: String, require: false },
-      "replyId": { type: String, require: false },
+      "replyId": { type: mongoose.Schema.ObjectId, require: false },
       "replyName": { type: String, require: false },
       "content": { type: String, require: false },
       "type": { type: String, require: false },
