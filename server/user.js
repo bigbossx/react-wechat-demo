@@ -1,88 +1,119 @@
-const express = require('express')
+const express = require("express")
 const Router = express.Router()
-const Utility = require('utility')
-const model = require('./model')
-const User = model.getModel('user')
-const Chat = model.getModel('chat')
-const Video = model.getModel('video')
-const Moments = model.getModel('moments')
-const _filter = {'pwd': 0,'__v': 0} // 过滤返回doc中的用户密码
+const Utility = require("utility")
+const model = require("./model")
+const User = model.getModel("user")
+const Chat = model.getModel("chat")
+const Video = model.getModel("video")
+const Moments = model.getModel("moments")
+const _filter = { "pwd": 0, "__v": 0 } // 过滤返回doc中的用户密码
 function md5Pwd (pwd) {
   // 在MD5的基础上使用更深的加密：加盐加密
-  const salt = 'vision0823!@#'
+  const salt = "vision0823!@#"
   return Utility.md5(Utility.md5(pwd + salt))
 }
+
 // 返回所有用户列表
-Router.get('/list', (req, res) => {
+Router.get("/list", (req, res) => {
   // User.remove({},(err,doc)=>{})
   User.find({}, (err, doc) => {
     if (doc) {
       return res.json({
         code: 0,
-        data: doc
+        data: doc,
       })
     }
   })
 })
 
-
 //发帖
-Router.post('/posting', (req, res) => {
-  const {userId} = req.cookies
-  const {description,canSeeUser,callUser,geolocation,imageLists} = req.body
+Router.post("/posting", (req, res) => {
+  const { userId } = req.cookies
+  const { description, canSeeUser, callUser, geolocation, imageLists } = req.body
   Moments.create({
     userId,
     description,
     canSeeUser,
     callUser,
     geolocation,
-    imageLists
+    imageLists,
   }, (err, doc) => {
     if (err) {
       return res.json({
         code: 1,
-        msg: err
+        msg: err,
       })
-    }else {
+    } else {
       return res.json({
         code: 0,
-        msg: 'success'
+        msg: "success",
+      })
+    }
+  })
+})
+
+//获取帖子数据
+Router.get("/getPosting", (req, res) => {
+  const { page, pageNumber } = req.query
+  let result = Moments.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    },
+    { $skip: parseInt(page - 1) * parseInt(pageNumber) },
+    { $limit: parseInt(pageNumber) },
+  ])
+  result.exec(function (err, doc) {
+    if (err) {
+      return res.json({
+        code: 1,
+        error: err,
+      })
+    }
+    if (doc) {
+      return res.json({
+        code: 0,
+        data: doc,
       })
     }
   })
 })
 
 // 视频接口
-Router.get('/video', (req, res) => {
+Router.get("/video", (req, res) => {
   Video.find({}, (err, doc) => {
     if (err) {
       return res.json({
         code: 1,
-        data: '意外错误'
+        data: "意外错误",
       })
     }
     if (doc) {
       return res.json({
         code: 0,
-        data: doc
+        data: doc,
       })
     }
   })
 })
 // 返回用户好友列表
-Router.get('/friendsAllList', (req, res) => {
-  const {userId} = req.cookies
-  User.findOne({_id: userId}, (err, doc) => {
+Router.get("/friendsAllList", (req, res) => {
+  const { userId } = req.cookies
+  User.findOne({ _id: userId }, (err, doc) => {
     if (err) {
       return res.json({
         code: 1,
-        data: '意外错误'
+        data: "意外错误",
       })
     }
     if (doc) {
       return res.json({
         code: 0,
-        data: doc.friends
+        data: doc.friends,
       })
     }
   })
@@ -118,112 +149,112 @@ Router.get("/friendsAgreeList", (req, res) => {
     }
   })
 })
-Router.get('/getmsglist', (req, res) => {
-  const {userId} = req.cookies
+Router.get("/getmsglist", (req, res) => {
+  const { userId } = req.cookies
   User.find({}, (err, userdoc) => {
     let userInfo = {}
     userdoc.forEach(v => {
-      userInfo[v._id] = {name: v.userName,avatar: v.avatar}
+      userInfo[v._id] = { name: v.userName, avatar: v.avatar }
     })
-    Chat.find({'$or': [{from: userId}, {to: userId}]}, (err, doc) => {
+    Chat.find({ "$or": [{ from: userId }, { to: userId }] }, (err, doc) => {
       if (!err) {
-        return res.json({code: 0,data: doc,userInfo: userInfo})
+        return res.json({ code: 0, data: doc, userInfo: userInfo })
       }
     })
   })
 })
 // 修改未读消息数量
-Router.post('/readmsg', (req, res) => {
-  const {userId} = req.cookies
-  const {from} = req.body
-  Chat.update({from,to: userId}, {'$set': {read: true}}, {'multi': true}, (err, doc) => {
+Router.post("/readmsg", (req, res) => {
+  const { userId } = req.cookies
+  const { from } = req.body
+  Chat.update({ from, to: userId }, { "$set": { read: true } }, { "multi": true }, (err, doc) => {
     if (doc) {
       return res.json({
         code: 0,
-        data: doc.nModified
+        data: doc.nModified,
       })
     }
     if (err) {
       return res.json({
         code: 1,
-        data: '修改失败'
+        data: "修改失败",
       })
     }
   })
 })
 // 登录
-Router.post('/login', (req, res) => {
-  const {userName, pwd} = req.body
-  User.findOne({userName,pwd: Utility.md5(pwd)}, _filter, (err, doc) => {
+Router.post("/login", (req, res) => {
+  const { userName, pwd } = req.body
+  User.findOne({ userName, pwd: Utility.md5(pwd) }, _filter, (err, doc) => {
     if (!doc) {
       return res.json({
         code: 1,
-        msg: '用户名或密码错误'
+        msg: "用户名或密码错误",
       })
-    }else {
-      res.cookie('userId', doc._id)
+    } else {
+      res.cookie("userId", doc._id)
       return res.json({
         code: 0,
-        data: doc
+        data: doc,
       })
     }
   })
 })
-Router.get('/search', (req, res) => {
-  const searchValue = req.param('searchValue')
-  User.find({userName: {$regex: searchValue}}, (err, doc) => {
+Router.get("/search", (req, res) => {
+  const searchValue = req.param("searchValue")
+  User.find({ userName: { $regex: searchValue } }, (err, doc) => {
     if (!err) {
-      res.json({code: 0,data: doc})
+      res.json({ code: 0, data: doc })
     }
   })
 })
 // 编辑资料
-Router.post('/edit', (req, res) => {
-  const {userId} = req.cookies
-  const {avatar, address, title, sex, desc} = req.body
-  User.update({_id: userId}, {'$set': {avatar,address,title,sex,desc}}, (err, doc) => {
+Router.post("/edit", (req, res) => {
+  const { userId } = req.cookies
+  const { avatar, address, title, sex, desc } = req.body
+  User.update({ _id: userId }, { "$set": { avatar, address, title, sex, desc } }, (err, doc) => {
     if (doc) {
       return res.json({
         code: 0,
-        data: doc
+        data: doc,
       })
     }
     if (err) {
       return res.json({
         code: 1,
-        data: '修改失败'
+        data: "修改失败",
       })
     }
   })
 })
 // 注册用户
-Router.post('/register', (req, res) => {
-  const {userName, pwd} = req.body
-  User.findOne({userName}, (err, doc) => {
+Router.post("/register", (req, res) => {
+  const { userName, pwd } = req.body
+  User.findOne({ userName }, (err, doc) => {
     if (doc) {
       return res.json({
         code: 1,
-        msg: '已存在用户'
+        msg: "已存在用户",
       })
     }
     User.create({
       userName,
       pwd: Utility.md5(pwd),
-      avatar: 'default.png',
-      sex: '人妖',
-      title: '默认的个性签名--不要迷恋哥，哥只是传说',
-      desc: '',
-      address: '广州市天河区中山大道西293号'
+      avatar: "default.png",
+      sex: "人妖",
+      title: "默认的个性签名--不要迷恋哥，哥只是传说",
+      desc: "",
+      address: "广州市天河区中山大道西293号",
     }, (e, d) => {
       if (e) {
         return res.json({
           code: 1,
-          msg: e
+          msg: e,
         })
-      }else {
+      } else {
         return res.json({
           code: 0,
-          msg: 'success'
+          msg: "success",
         })
       }
     })
@@ -231,39 +262,39 @@ Router.post('/register', (req, res) => {
 })
 
 // 返回用户的登录状态
-Router.get('/info', (req, res) => {
+Router.get("/info", (req, res) => {
   // 用户有没有cookie
-  const {userId} = req.cookies
+  const { userId } = req.cookies
   if (!userId) {
     return res.json({
       code: 1,
-      msg: 'err'
+      msg: "err",
     })
   }
-  User.findOne({_id: userId}, _filter , (err, doc) => {
+  User.findOne({ _id: userId }, _filter, (err, doc) => {
     if (err) {
       return res.json({
         code: 1,
-        msg: err
+        msg: err,
       })
     }
     if (doc) {
       return res.json({
         code: 0,
-        data: doc
+        data: doc,
       })
     }
   })
 })
 // 忽略好友请求
-Router.post('/ignorerequest', (req, res) => {
+Router.post("/ignorerequest", (req, res) => {
   // res.json({
   //     code:0,
   //     msg:'success'
   // })
-  const {friendsId} = req.body
-  const {userId} = req.cookies
-  User.findOne({_id: userId}, (err, doc) => {
+  const { friendsId } = req.body
+  const { userId } = req.cookies
+  User.findOne({ _id: userId }, (err, doc) => {
     if (doc) {
       doc.friends.forEach((item) => {
         if (item.userId == friendsId) {
@@ -274,24 +305,24 @@ Router.post('/ignorerequest', (req, res) => {
       doc.save((e, d) => {
         return res.json({
           code: 0,
-          msg: 'success'
+          msg: "success",
         })
       })
     }
     if (err) {
       return res.json({
         code: 1,
-        msg: 'failed'
+        msg: "failed",
       })
     }
   })
 })
 // 同意好友请求
-Router.post('/agreerequest', (req, res) => {
+Router.post("/agreerequest", (req, res) => {
 
-  const {friendsId} = req.body
-  const {userId} = req.cookies
-  User.findOne({_id: userId}, (err, doc) => {
+  const { friendsId } = req.body
+  const { userId } = req.cookies
+  User.findOne({ _id: userId }, (err, doc) => {
     if (doc) {
       doc.friends.forEach((item) => {
         if (item.userId == friendsId && !item.ignore) {
@@ -305,11 +336,11 @@ Router.post('/agreerequest', (req, res) => {
     if (err) {
       res.json({
         code: 1,
-        msg: 'failed'
+        msg: "failed",
       })
     }
   })
-  User.findOne({_id: friendsId}, (err, doc) => {
+  User.findOne({ _id: friendsId }, (err, doc) => {
     if (doc) {
       doc.friends.forEach((item) => {
         if (item.userId == userId && !item.ignore) {
@@ -321,7 +352,7 @@ Router.post('/agreerequest', (req, res) => {
         if (d) {
           res.json({
             code: 0,
-            msg: 'success'
+            msg: "success",
           })
         }
       })
@@ -329,16 +360,16 @@ Router.post('/agreerequest', (req, res) => {
     if (err) {
       res.json({
         code: 1,
-        msg: 'failed'
+        msg: "failed",
       })
     }
   })
 })
 // 删除好友
-Router.post('/delfriend', (req, res) => {
-  const {friendId} = req.body
-  const {userId} = req.cookies
-  User.findOne({_id: userId}, (err, doc) => {
+Router.post("/delfriend", (req, res) => {
+  const { friendId } = req.body
+  const { userId } = req.cookies
+  User.findOne({ _id: userId }, (err, doc) => {
     if (doc) {
       doc.friends.forEach((item, index) => {
         if (item.userId == friendId) {
@@ -348,14 +379,14 @@ Router.post('/delfriend', (req, res) => {
       doc.save((e, d) => {
         return res.json({
           code: 0,
-          msg: 'success'
+          msg: "success",
         })
       })
     }
     if (err) {
       res.json({
         code: 1,
-        msg: 'failed'
+        msg: "failed",
       })
     }
   })

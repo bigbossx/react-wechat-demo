@@ -1,6 +1,13 @@
-import React, { Component } from 'react'
-import { Toast } from 'antd-mobile'
-import PostPanel from './../../components/postpanel'
+import React, { Component } from "react"
+import { Toast } from "antd-mobile"
+import { connect } from "react-redux"
+import PostPanel from "./../../components/postpanel"
+import { getPosting, getMorePosting } from "./../../redex/monents.redux"
+
+@connect(
+  state => state,
+  { getPosting, getMorePosting },
+)
 export default class Monents extends Component {
 
   constructor (props) {
@@ -8,16 +15,23 @@ export default class Monents extends Component {
     this.handleToPosting = this.handleToPosting.bind(this)
     this.handleGoBack = this.handleGoBack.bind(this)
   }
-  handleToPosting () {
-    this.props.history.push('/posting')
+
+  componentDidMount () {
+    this.props.getPosting(10)
   }
-  handleGoBack(){
+
+  handleToPosting () {
+    this.props.history.push("/posting")
+  }
+
+  handleGoBack () {
     this.props.history.goBack()
   }
 
   render () {
+    console.log(this.state)
     return (
-      <div style={{background: '#fff'}}>
+      <div style={{ background: "#fff" }}>
         <div className='cu-bar bg-black search fixed-header'>
           <div className='action' onClick={this.handleGoBack}>
             <span className='cuIcon-back text-xxl'></span>
