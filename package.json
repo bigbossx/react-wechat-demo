@@ -36,6 +36,7 @@
     "html-webpack-plugin": "2.29.0",
     "http-proxy-middleware": "^0.19.1",
     "jest": "20.0.4",
+    "jsonp": "^0.2.1",
     "mongoose": "^5.2.9",
     "nprogress": "^0.2.0",
     "object-assign": "4.1.1",
@@ -137,6 +138,10 @@
     },
     "/api": {
       "target": "https://me.xyh.io/",
+      "changeOrigin": true
+    },
+    "/baiduApi": {
+      "target": "http://api.map.baidu.com/",
       "changeOrigin": true
     }
   }
