@@ -22,6 +22,7 @@ export function monents (state = initState, action) {
 
 //action creator
 function getPostingAction (data) {
+  // console.log(data)
   return { type: GET_POSTING, payload: data }
 }
 
@@ -38,7 +39,8 @@ export function getPosting (pageNumber) {
       },
     }).then((res) => {
       if (res.status == 200 && res.data.code == 0) {
-        dispatch(getPostingAction())
+        // console.log(res.data)
+        dispatch(getPostingAction(res.data.data))
       }
     })
   }

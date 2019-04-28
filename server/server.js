@@ -56,7 +56,6 @@ server.listen(8081, () => {
 //   console.log(err)
 // })
 
-
 app.get('/data/user', (req, res) => {
   User.find({}, (err, doc) => {
     if (!err) {
@@ -71,4 +70,3 @@ app.get('/data/video', (req, res) => {
     }
   })
 })
-

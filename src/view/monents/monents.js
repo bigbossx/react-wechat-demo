@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Toast } from "antd-mobile"
 import { connect } from "react-redux"
+import InfiniteScroll from 'react-infinite-scroller';
 import PostPanel from "./../../components/postpanel"
 import { getPosting, getMorePosting } from "./../../redex/monents.redux"
 
@@ -28,8 +29,12 @@ export default class Monents extends Component {
     this.props.history.goBack()
   }
 
+  onEndReached=()=>{
+    console.log("onEndReached")
+  }
+
   render () {
-    console.log(this.state)
+    
     return (
       <div style={{ background: "#fff" }}>
         <div className='cu-bar bg-black search fixed-header'>
@@ -37,7 +42,7 @@ export default class Monents extends Component {
             <span className='cuIcon-back text-xxl'></span>
           </div>
           <div className='content'>
-            ColorUI
+            朋友圈
           </div>
           <div className='action' onClick={this.handleToPosting}>
             <span className='cuIcon-camera text-xxl'></span>
@@ -45,13 +50,27 @@ export default class Monents extends Component {
         </div>
         <div className='monents-container'>
           <div className='monents-userInfo'>
-            <span className='monents-userInfo-name'>Vision_X</span>
+            <span className='monents-userInfo-name'>{this.props.user.userName}</span>
             <div className='monents-userInfo-avatar'>
-              <img src='https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg' />
+              <img src={this.props.user.avatar} />
             </div>
           </div>
         </div>
-        <PostPanel></PostPanel>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.onEndReached}
+          hasMore={true}
+          // loader={<div className="loader" key={0}>Loading ...</div>}
+        >   
+          {
+            this.props.monents.postingList.length>0 && this.props.monents.postingList.map((item,index)=>{
+              return (
+                <PostPanel data={item} key={index}></PostPanel>
+              )
+            })
+          } 
+          
+      </InfiniteScroll>
         <div className='cu-bar input'>
           <div className='action'>
             <span className='cuIcon-roundaddfill text-grey'></span>

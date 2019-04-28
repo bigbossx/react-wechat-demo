@@ -1,10 +1,10 @@
 import React from "react"
 import axios from "axios"
-import { ImagePicker, List, Radio, Flex, WhiteSpace, InputItem, Button, WingBlank, NavBar, Icon } from "antd-mobile"
+import { ImagePicker, List, Radio, Flex, WhiteSpace, InputItem, Button, WingBlank, NavBar, Icon, Toast } from "antd-mobile"
 import { loadUserInfo, edit } from "./../redex/user.redux"
 import { connect } from "react-redux"
 import * as qiniu from "qiniu-js"
-
+import {QINIU_DOMAIN} from "./../env"
 @connect(
   state => state.user,
   { loadUserInfo, edit },
@@ -14,6 +14,7 @@ export default class EditInfo extends React.Component {
     super(props)
     this.state = {
       files: [],
+      newAvatar:"",
       showAddBtn: true,
       optionValue: 0,
       address: "",
@@ -62,9 +63,11 @@ export default class EditInfo extends React.Component {
         var subscription = observable.subscribe((next) => {
 
         }, (error) => {
+          Toast.error(error)
           console.log(error)
         }, () => {
           this.setState({
+            newAvatar:`${QINIU_DOMAIN}${key}`,
             files,
             showAddBtn: false,
           })
@@ -98,7 +101,7 @@ export default class EditInfo extends React.Component {
     // }).then((res)=>{
     //     //todo
     // })
-    const avatar = this.props.avatar
+    const avatar = this.state.newAvatar
     const sex = this.state.optionValue == 0 ? "男" : "女"
     const title = this.state.title || this.props.title
     const address = this.state.address || this.props.address
