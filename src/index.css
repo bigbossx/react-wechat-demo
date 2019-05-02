@@ -28,6 +28,13 @@ body {
     z-index: 99;
 }
 
+.fixed-bottom{
+    position: fixed !important;
+    bottom:0;
+    width: 100%;
+    z-index: 99;
+}
+
 .tip {
     color: #888;
     text-align: center;

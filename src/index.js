@@ -7,6 +7,7 @@ import 'antd-mobile/dist/antd-mobile.css'
 import './index.css'
 import './style/main.css'
 import './style/icon.css'
+
 import App from './App'
 import { Provider } from 'react-redux'
 import reduxCombine from './redex/index.redux'

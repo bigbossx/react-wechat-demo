@@ -52,10 +52,12 @@ export default class Posting extends Component {
       param:'callback'
     },(err,response)=>{
         //to-do
-        console.log(response.result)
-        this.setState({
-          geolocationList:response.result.pois
-        })
+        if(response.result){
+          console.log(response.result)
+          this.setState({
+            geolocationList:response.result.pois
+          })
+        }
     })
 // var map = new BMap.Map("l-map");      
 // // map.centerAndZoom(new BMap.Point(23.134897, 113.364139), 11);      

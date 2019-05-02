@@ -1,20 +1,75 @@
 import React, { Component } from 'react'
-import { Flex } from 'antd-mobile'
+import Lightbox from 'react-images'
+import { Flex,ActionSheet } from 'antd-mobile'
 export default class PostPanel extends Component {
+  
+  constructor(props){
+    super(props)
+    this.state={
+      previewShow:false,
+      previewImages:[],
+      currentPreviewIndex:0,
+    }
+  }
+  handleClickImage=(index)=>{
+    let previewImages=this.props.data.imageLists.map(item=>{
+      return {
+        src:item.url
+      }
+    })
+    this.setState({
+      previewShow:true,
+      previewImages:previewImages,
+      currentPreviewIndex:index,
+    })
+  }
+  gotoPrevLightboxImage=()=>{
+    this.setState({
+      currentPreviewIndex:this.state.currentPreviewIndex-1
+    })
+  }
+
+  gotoNextLightboxImage=()=>{
+    this.setState({
+      currentPreviewIndex:this.state.currentPreviewIndex+1
+    })
+  }
+
+  closeLightbox=()=>{
+    this.setState({
+      previewShow:false
+    })
+  }
+
+  handleClickComment=()=>{
+    this.props.bindCommentShow()
+  }
+
+  handleClickShare=(data)=>{
+    this.props.bindShareShow(data)
+  }
 
   render () {
-    // console.log('postpanel', this.props.data)
     const {data} = this.props
-
+    const formatDate=(timeStamp)=>{
+      let date = new Date(timeStamp)
+      let Y = date.getFullYear() + '-';
+      let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+      let D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+      let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+      let m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+      let s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+      return Y+M+D+h+m+s;
+    }
     const renderImageComponent = (lists) => {
       let length = lists.length
       if (length === 1) {
         return (
           <div className='post-main-content-single'>
-            {lists.map(item => {
+            {lists.map((item,index) => {
                return (
                  <div className='post-main-content post-main-content-single__item' key={item._id}>
-                   <img src={item.url} />
+                   <img src={item.url} onClick={()=>{this.handleClickImage(index)}}/>
                  </div>
                )
              })}
@@ -23,10 +78,10 @@ export default class PostPanel extends Component {
       }else if (length === 2 || length === 4) {
         return (
           <div className='post-main-content-double'>
-            {lists.map((item) => {
+            {lists.map((item,index) => {
                return (
                  <div className='post-main-content post-main-content-double__item' key={item._id}>
-                   <img src={item.url} />
+                   <img src={item.url} onClick={()=>{this.handleClickImage(index)}}/>
                  </div>
                )
              })}
@@ -35,10 +90,10 @@ export default class PostPanel extends Component {
       }else {
         return (
           <div className='post-main-content-three'>
-            {lists.map(item => {
+            {lists.map((item,index) => {
                return (
                  <div className='post-main-content post-main-content-three__item' key={item._id}>
-                   <img src={item.url} />
+                   <img src={item.url} onClick={()=>{this.handleClickImage(index)}}/>
                  </div>
                )
              })}
@@ -62,9 +117,11 @@ export default class PostPanel extends Component {
           </div>
           {renderImageComponent(data.imageLists)}
           <div className='post-other'>
-            <span className='text-grey'>{data.timeStamp}</span>
+            <span className='text-grey'>{formatDate(data.timeStamp)}</span>
             <div className='cu-tag bg-greyLight radius'>
-              <span className='cuIcon-more text-blue text-lg'></span>
+              <span className='cuIcon-like text-lg'></span>
+              <span className='cuIcon-comment text-lg' onClick={()=>{this.handleClickComment("comment")}} style={{margin:"0 15px"}}></span>
+              <span className='cuIcon-share text-lg' onClick={()=>{this.handleClickShare("share")}}></span>
             </div>
           </div>
           <div className='post-commit bg-greyLight'>
@@ -88,6 +145,16 @@ export default class PostPanel extends Component {
             </div>
           </div>
         </div>
+        <Lightbox
+          images={this.state.previewImages}
+          isOpen={this.state.previewShow}
+          backdropClosesModal={true}
+          imageCountSeparator={" / "}
+          currentImage={this.state.currentPreviewIndex}
+          onClickPrev={this.gotoPrevLightboxImage}
+          onClickNext={this.gotoNextLightboxImage}
+          onClose={this.closeLightbox} 
+        />
       </div>
     )
   }
