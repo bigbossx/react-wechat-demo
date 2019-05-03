@@ -46,6 +46,11 @@ export default class Register extends React.Component{
                         <InputItem
                             type="password"
                             onChange={v=>this.handleChange('repeatpwd',v)}
+                            onKeyDown={(e)=>{
+                                if(e.keyCode === 13){
+                                    this.handleRegister()
+                                }
+                            }}
                         >确认密码</InputItem>
                     </List>
                     <WhiteSpace />

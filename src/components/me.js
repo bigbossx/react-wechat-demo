@@ -40,7 +40,13 @@ export default class Me extends React.Component{
         return this.props.userName? (
             <div>
                 <Result
-                    img={<img style={{width:70}} src={this.props.avatar} alt=''/>}
+                    img={<img 
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: 10
+                        }} 
+                        src={this.props.avatar} alt=''/>}
                     title={this.props.userName}
                     message={`Chat号:  ${this.props._id}`}
                 />

@@ -55,7 +55,7 @@ const models = {
     'status': { type: String, require: false },
     'likeUser': { type: Array, require: false },
     'comment': [{
-      'timeStamp': { type: Number, require: false },
+      'timeStamp': { type: Number, default: Date.now },
       'commentId': { type: mongoose.Schema.ObjectId, require: false },
       'commentName': { type: String, require: false },
       'replyId': { type: mongoose.Schema.ObjectId, require: false },

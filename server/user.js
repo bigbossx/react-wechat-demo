@@ -64,7 +64,8 @@ Router.get('/getPosting', (req, res) => {
       }
     },
     { $skip: parseInt(page - 1) * parseInt(pageNumber) },
-    { $limit: parseInt(pageNumber) }
+    { $limit: parseInt(pageNumber) },
+    { $sort: {timeStamp: -1} }
   ])
   result.exec(function (err, doc) {
     if (err) {
@@ -77,6 +78,66 @@ Router.get('/getPosting', (req, res) => {
       return res.json({
         code: 0,
         data: doc
+      })
+    }
+  })
+})
+
+// 点赞帖子
+Router.post('/likeOrDislikePosting', (req, res) => {
+  const { _id, userInfo } = req.body
+  Moments.findOne({ _id}, (err, doc) => {
+    if (err) {
+      return res.json({
+        code: 1,
+        data: '意外错误'
+      })
+    }
+    if (doc) {
+      let flag = false
+      doc.likeUser.map((item, index) => {
+        if (item.userId === userInfo.userId) {
+          doc.likeUser.splice(index, 1)
+          flag = true
+        }
+      })
+      if (!flag)(
+        doc.likeUser.push(userInfo)
+      )
+      doc.save(function (err1, doc1) {
+        if (!err1) {
+          return res.json({
+            code: 0,
+            msg:"success",
+            data: doc1
+          })
+        }
+      })
+    }
+  })
+})
+
+//评论帖子
+Router.post('/commentPosting', (req, res) => {
+  const { _id, commentData } = req.body
+  console.log(commentData)
+  Moments.findOne({ _id}, (err, doc) => {
+    if (err) {
+      return res.json({
+        code: 1,
+        data: '意外错误'
+      })
+    }
+    if (doc) {
+      doc.comment.push(commentData)
+      doc.save(function (err1, doc1) {
+        if (!err1) {
+          return res.json({
+            code: 0,
+            msg:"success",
+            data: doc1
+          })
+        }
       })
     }
   })

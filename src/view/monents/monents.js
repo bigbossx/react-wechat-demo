@@ -1,13 +1,13 @@
 import React, { Component } from "react"
-import { Toast } from "antd-mobile"
+import { Toast,Modal } from "antd-mobile"
 import { connect } from "react-redux"
 import InfiniteScroll from 'react-infinite-scroller';
 import PostPanel from "./../../components/postpanel"
-import { getPosting, getMorePosting } from "./../../redex/monents.redux"
+import { getPosting, getMorePosting,likeOrDislikePosting,commentPosting } from "./../../redex/monents.redux"
 const socialShare=window.socialShare
 @connect(
   state => state,
-  { getPosting, getMorePosting },
+  { getPosting, getMorePosting,likeOrDislikePosting,commentPosting }
 )
 export default class Monents extends Component {
 
@@ -17,7 +17,12 @@ export default class Monents extends Component {
     this.handleGoBack = this.handleGoBack.bind(this)
     this.state={
       showCommentPanel:false,
-      showSharePanel:false
+      showSharePanel:false,
+      commentType:"",
+      commentValue:"",
+      commentId:"",
+      replyId:"",
+      replyName:""
     }
     
     this.commentRef = React.createRef();
@@ -39,9 +44,9 @@ export default class Monents extends Component {
     console.log("onEndReached")
   }
 
-  handleShowSharePanel=(data)=>{
+  handleShowSharePanel= async (data)=>{
     console.log(data)
-    this.setState({
+    await this.setState({
       showSharePanel:true
     })
     let $config = {
@@ -57,15 +62,62 @@ export default class Monents extends Component {
       wechatQrcodeHelper  : '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
     };
     socialShare('.social-share-cs',$config);
+    
   }
 
-  handleShowComment=async (data)=>{
+  handleShowComment=async (type,data)=>{
     console.log(data)
-    await this.setState({
-      showCommentPanel:true
-    })
-    this.commentRef.focus()
+    if(type==="comment"){
+      await this.setState({
+        commentId:data.id,
+        commentType:type,
+        showCommentPanel:true
+      })
+    }else{
+      await this.setState({
+        commentId:data.id,
+        replyId:data.replyId,
+        replyName:data.replyName,
+        commentType:type,
+        showCommentPanel:true
+      })
+    }
     
+    this.commentRef.focus()
+  }
+
+  handleLikeOrDislike=(postId)=>{
+    this.props.likeOrDislikePosting(postId,{userId:this.props.user._id,userName:this.props.user.userName})
+  }
+
+  handleComment=()=>{
+    if(this.state.commentType==="comment"){
+      this.props.commentPosting(this.state.commentId,{
+        commentId:this.props.user._id,
+        commentName:this.props.user.userName,
+        content:this.state.commentValue,
+        type:"comment"
+      })
+    }else{
+      this.props.commentPosting(this.state.commentId,{
+        commentId:this.props.user._id,
+        commentName:this.props.user.userName,
+        content:this.state.commentValue,
+        replyId:this.state.replyId,
+        replyName:this.state.replyName,
+        type:"reply"
+      })
+    }
+    this.setState({
+      commentValue:"",
+      showCommentPanel:false
+    })
+    
+  }
+  updateInput=(event)=>{
+    this.setState({
+      commentValue:event.target.value
+    })
   }
 
   render () {
@@ -85,7 +137,7 @@ export default class Monents extends Component {
         </div>
         <div className='monents-container'>
           <div className='monents-userInfo'>
-            <span className='monents-userInfo-name'>{this.props.user.userName}</span>
+            <span className='monents-userInfo-name text-cut'>{this.props.user.userName}</span>
             <div className='monents-userInfo-avatar'>
               <img src={this.props.user.avatar} />
             </div>
@@ -101,10 +153,12 @@ export default class Monents extends Component {
               this.props.monents.postingList.length>0 && this.props.monents.postingList.map((item,index)=>{
                 return (
                   <PostPanel 
+                    userInfo={this.props.user}
                     data={item}
                     key={index} 
+                    bindLikeOrDislike={(id)=>{this.handleLikeOrDislike(id)}}
                     bindShareShow={(data)=>{this.handleShowSharePanel(data)}}
-                    bindCommentShow={(data)=>{this.handleShowComment(data)}}
+                    bindCommentShow={(type,data)=>{this.handleShowComment(type,data)}}
                   ></PostPanel>
                 )
               })
@@ -115,30 +169,46 @@ export default class Monents extends Component {
           this.state.showCommentPanel &&
           <div className='cu-bar input fixed-bottom'>
             <div className='action'>
-              <span className='cuIcon-roundaddfill text-grey'></span>
+              <span className='cuIcon-roundclose text-grey' onClick={()=>{
+                this.setState({
+                  showCommentPanel:false
+                })
+              }}></span>
             </div>
             <input 
               className='solid-bottom' 
               maxLength='300'
               cursor-spacing='10' 
+              value={this.state.commentValue}
               ref={(comment)=>this.commentRef=comment}
+              onChange={this.updateInput}
+              placeholder={this.state.commentType}
               onBlur={()=>{
                 this.setState({
                   showCommentPanel:false
                 })
               }}
+              onKeyDown={(e)=>{
+                if(e.keyCode === 13){
+                    this.handleComment()
+                }
+              }}
             ></input>
-            <div className='action'>
-              <span className='cuIcon-emojifill text-grey'></span>
-            </div>
-            <button className='cu-btn bg-green shadow-blur'>
-              发送
-            </button>
           </div>
         }
-        {
-          this.state.showSharePanel && <div className="social-share-cs fixed-bottom"></div>
-        }
+        <Modal
+          popup
+          visible={this.state.showSharePanel}
+          onClose={()=>{
+            this.setState({
+              showSharePanel:false
+            })
+          }}
+          animationType="slide-up"
+        >
+          <div className='social-share-cs fixed-bottom custom-share-box'></div>
+        </Modal>
+        
       </div>
     )
   }

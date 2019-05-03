@@ -149,8 +149,10 @@ export default class Posting extends Component {
       geolocation: this.state.geolocation,
       imageLists: this.state.files,
     }).then(res => {
+      console.log("res",res)
       if(res.code===0){
         Toast.success("success")
+        this.props.history.goBack()
       }
     })
   }

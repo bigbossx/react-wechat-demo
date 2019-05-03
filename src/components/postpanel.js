@@ -41,16 +41,20 @@ export default class PostPanel extends Component {
     })
   }
 
-  handleClickComment=()=>{
-    this.props.bindCommentShow()
+  handleClickComment=(type,data)=>{
+    this.props.bindCommentShow(type,data)
   }
 
   handleClickShare=(data)=>{
     this.props.bindShareShow(data)
   }
 
+  handleClickLikeOrDislike=(postId)=>{
+    this.props.bindLikeOrDislike(postId)
+  }
+
   render () {
-    const {data} = this.props
+    const {data,userInfo} = this.props
     const formatDate=(timeStamp)=>{
       let date = new Date(timeStamp)
       let Y = date.getFullYear() + '-';
@@ -109,7 +113,7 @@ export default class PostPanel extends Component {
         </div>
         <div className='post-main'>
           <div className='post-main-header'>
-            <span className='post-main-header-username text-wechat text-bold text-xl text-Abc'>{data.userInfo[0].userName}</span>
+            <span className='post-main-header-username text-wechat text-bold text-xl'>{data.userInfo[0].userName}</span>
             <i className='text-gray cuIcon-lock text-xl'></i>
           </div>
           <div className='post-main-description text-lg'>
@@ -119,30 +123,63 @@ export default class PostPanel extends Component {
           <div className='post-other'>
             <span className='text-grey'>{formatDate(data.timeStamp)}</span>
             <div className='cu-tag bg-greyLight radius'>
-              <span className='cuIcon-like text-lg'></span>
-              <span className='cuIcon-comment text-lg' onClick={()=>{this.handleClickComment("comment")}} style={{margin:"0 15px"}}></span>
+              {
+                JSON.stringify(data.likeUser).indexOf(userInfo._id)>-1?
+                <span className='cuIcon-likefill text-red text-lg' onClick={()=>{this.handleClickLikeOrDislike(data._id)}}></span>:
+                <span className='cuIcon-like text-lg' onClick={()=>{this.handleClickLikeOrDislike(data._id)}}></span>
+              }
+              
+              <span className='cuIcon-comment text-lg' onClick={()=>{this.handleClickComment("comment",{id:data._id})}} style={{margin:"0 15px"}}></span>
               <span className='cuIcon-share text-lg' onClick={()=>{this.handleClickShare("share")}}></span>
             </div>
           </div>
           <div className='post-commit bg-greyLight'>
-            <div className='like-container'>
-              <span className='cuIcon-like text-wechat text-df' style={{paddingRight: '5px'}}></span>
-              <span className='text-wechat text-df text-bold' style={{paddingRight: '5px'}}>Vison_x,</span>
-              <span className='text-wechat text-df text-bold' style={{paddingRight: '5px'}}>小辉,</span>
-              <span className='text-wechat text-df text-bold' style={{paddingRight: '5px'}}>锐儿</span>
-            </div>
-            <div className='commit-container text-df'>
-              <div className='commit-item'>
-                <span className='text-wechat text-bold'>方小姐</span>
-                <span>:我现在都没去买game of thrones 奥利奥特别版</span>
-              </div>
-              <div className='commit-item'>
-                <span className='text-wechat text-bold'>陈文慧</span>
-                <span>回复</span>
-                <span className='text-wechat text-bold'>lyc</span>
-                <span>:我现在都没去买game of thrones 奥利奥特别版</span>
-              </div>
-            </div>
+              {
+                data.likeUser.length>0&&
+                  <div className='like-container'>
+                    <span className='cuIcon-like text-wechat text-df' style={{paddingRight: '5px'}}></span>
+                    {
+                      data.likeUser.map((item,index)=>{
+                        return (
+                          <span key={item.userId} className='text-wechat text-df text-bold' style={{paddingRight: '5px'}}>{item.userName}{data.likeUser.length-1!==index&&","}</span>
+                        )
+                      })
+                    }
+                  </div> 
+              }
+            
+              {
+                data.comment.length>0&&
+                  <div className='commit-container text-df'>
+                  {
+                    data.comment.map((item,index)=>{
+              
+                      if(item.type==="comment"){
+                        return (
+                          <div className='commit-item' key={index} onClick={()=>{
+                            this.handleClickComment("reply",{id:data._id,replyId:item.commentId,replyName:item.commentName})
+                          }}>
+                            <span className='text-wechat text-bold'>{item.commentName}</span>
+                            <span>:{item.content}</span>
+                          </div>
+                        )
+                      }else{
+                        return (
+                          <div className='commit-item' key={index} onClick={()=>{
+                            this.handleClickComment("reply",{id:data._id,replyId:item.commentId,replyName:item.commentName})
+                          }}>
+                            <span className='text-wechat text-bold'>{item.commentName}</span>
+                            <span>回复</span>
+                            <span className='text-wechat text-bold'>{item.replyName}</span>
+                            <span>:{item.content}</span>
+                          </div>
+                        )
+                      }
+                    
+                    })
+                  }
+                  </div>
+              }
           </div>
         </div>
         <Lightbox
