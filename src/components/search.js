@@ -161,7 +161,7 @@ export default class Search extends React.Component{
                                 >
                                     <Header
                                         title={v.userName}
-                                        thumb={require(`./img/${v.avatar}`)}
+                                        thumb={v.avatar}
                                         extra={v.sex}
                                     ></Header>
                                     <Body>个性签名:{v.title}</Body>

@@ -126,7 +126,7 @@ export function getMorePosting (page, pageNumber) {
       },
     }).then((res) => {
       if (res.status == 200 && res.data.code == 0) {
-        dispatch(getMorePostingAction())
+        dispatch(getMorePostingAction(res.data.data))
       }
     })
   }

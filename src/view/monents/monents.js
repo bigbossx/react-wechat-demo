@@ -22,14 +22,19 @@ export default class Monents extends Component {
       commentValue:"",
       commentId:"",
       replyId:"",
-      replyName:""
+      replyName:"",
+      page:1,
+      isLoading:true
     }
     
     this.commentRef = React.createRef();
   }
 
   componentDidMount () {
-    this.props.getPosting(10)
+    this.props.getPosting(4)
+    this.setState({
+      isLoading:false
+    })
   }
 
   handleToPosting () {
@@ -40,7 +45,13 @@ export default class Monents extends Component {
     this.props.history.goBack()
   }
 
-  onEndReached=()=>{
+  onEndReached=async ()=>{
+    
+    // await this.setState({
+    //   page:this.state.page+1,
+    //   isLoading:true
+    // })
+    //this.props.getMorePosting(this.state.page,4)
     console.log("onEndReached")
   }
 
@@ -143,28 +154,29 @@ export default class Monents extends Component {
             </div>
           </div>
         </div>
-        <InfiniteScroll
-            pageStart={0}
-            loadMore={this.onEndReached}
-            hasMore={true}
-            // loader={<div className="loader" key={0}>Loading ...</div>}
-          >   
-            {
-              this.props.monents.postingList.length>0 && this.props.monents.postingList.map((item,index)=>{
-                return (
-                  <PostPanel 
-                    userInfo={this.props.user}
-                    data={item}
-                    key={index} 
-                    bindLikeOrDislike={(id)=>{this.handleLikeOrDislike(id)}}
-                    bindShareShow={(data)=>{this.handleShowSharePanel(data)}}
-                    bindCommentShow={(type,data)=>{this.handleShowComment(type,data)}}
-                  ></PostPanel>
-                )
-              })
-            } 
-            
-        </InfiniteScroll>
+        <div>
+          <InfiniteScroll
+              pageStart={1}
+              loadMore={this.onEndReached}
+              hasMore={!this.state.isLoading}
+              // loader={<div className="loader" key={0}>Loading ...</div>}
+            >   
+              {
+                this.props.monents.postingList.length>0 && this.props.monents.postingList.map((item,index)=>{
+                  return (
+                    <PostPanel 
+                      userInfo={this.props.user}
+                      data={item}
+                      key={index} 
+                      bindLikeOrDislike={(id)=>{this.handleLikeOrDislike(id)}}
+                      bindShareShow={(data)=>{this.handleShowSharePanel(data)}}
+                      bindCommentShow={(type,data)=>{this.handleShowComment(type,data)}}
+                    ></PostPanel>
+                  )
+                })
+              } 
+          </InfiniteScroll>
+        </div>
         {
           this.state.showCommentPanel &&
           <div className='cu-bar input fixed-bottom'>

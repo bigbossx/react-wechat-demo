@@ -40,8 +40,8 @@ export default class EditInfo extends React.Component {
   onFileChange = (files, type) => {
     console.log(files, type)
     if (type === "add") {
+      //上传图片
       axios.get("http://111.230.91.125:9000/api/uptoken").then((res) => {
-
         var domain = res.data.domain
         var token = res.data.uptoken
         var config = {
@@ -61,7 +61,6 @@ export default class EditInfo extends React.Component {
         var observable = qiniu.upload(file, key, token, putExtra, config)
         console.log(observable)
         var subscription = observable.subscribe((next) => {
-
         }, (error) => {
           Toast.error(error)
           console.log(error)

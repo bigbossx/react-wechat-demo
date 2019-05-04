@@ -105,7 +105,7 @@ export default class Friends extends React.Component {
                     onClick={() => {this.showActionSheet(v)}}
               >
                 <Item
-                  thumb={require(`./img/${v.avatar}`)}
+                  thumb={v.avatar}
                 >{v.userName}</Item>
               </List>
               <WhiteSpace />
