@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import Lightbox from "react-images"
+import LazyLoad from "react-lazyload"
+import { ActivityIndicator } from "antd-mobile"
 
 export default class PostPanel extends Component {
 
@@ -75,7 +77,9 @@ export default class PostPanel extends Component {
             {lists.map((item, index) => {
               return (
                 <div className='post-main-content post-main-content-single__item' key={item._id}>
-                  <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  <LazyLoad placeholder={<ActivityIndicator size="large" />}>
+                    <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  </LazyLoad>
                 </div>
               )
             })}
@@ -87,7 +91,9 @@ export default class PostPanel extends Component {
             {lists.map((item, index) => {
               return (
                 <div className='post-main-content post-main-content-double__item' key={item._id}>
-                  <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  <LazyLoad placeholder={<ActivityIndicator size="large" />}>
+                    <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  </LazyLoad>
                 </div>
               )
             })}
@@ -99,7 +105,9 @@ export default class PostPanel extends Component {
             {lists.map((item, index) => {
               return (
                 <div className='post-main-content post-main-content-three__item' key={item._id}>
-                  <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  <LazyLoad placeholder={<ActivityIndicator size="large" />}>
+                    <img src={item.url} onClick={() => {this.handleClickImage(index)}} />
+                  </LazyLoad>
                 </div>
               )
             })}
@@ -109,7 +117,7 @@ export default class PostPanel extends Component {
     }
 
     return (
-      <div className='post-container' style={{ borderBottom: (index !== length - 1)?"8px solid #f5f5f5":"" }}>
+      <div className='post-container' style={{ borderBottom: (index !== length - 1) ? "8px solid #f5f5f5" : "" }}>
         <div className='post-avatar'>
           <img src={data.userInfo[0] && data.userInfo[0].avatar || "http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
         </div>
