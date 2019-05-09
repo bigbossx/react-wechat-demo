@@ -24,12 +24,6 @@ export default class Home extends React.Component{
         }
     }
     componentDidMount(){
-// if(!this.props.user.userName){
-//      Toast.offline('请登录!!!', 1)
-//      this.props.history.push('/login')
-//      return
-// }
-
         if(!this.props.chat.chatMsg.length){
             this.props.getMsgList()
             this.props.getMsg()
@@ -40,7 +34,6 @@ export default class Home extends React.Component{
             this.props.getAddRequest()
             //console.log('我执行了home的getaddreq')
         }
-        console.log(this.props)
     }
     onSelect = (opt) => {
         // console.log(opt.props.value);
@@ -90,7 +83,7 @@ export default class Home extends React.Component{
         ]
         return (
             <div>
-                <NavBar 
+                <NavBar
                     mode="dark"
                     className='fixed-header'
                     rightContent={

@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import axios from "axios"
-import Jsonp from 'jsonp'
+import Jsonp from "jsonp"
 import { connect } from "react-redux"
 import {
   Button,
@@ -13,14 +13,16 @@ import {
   Badge,
   Modal,
   Checkbox,
-  Radio
+  Radio,
 } from "antd-mobile"
 import { getFriendsList } from "../../redex/friends.redux"
-const BMap=window.BMap
+import * as qiniu from "qiniu-js"
+import { QINIU_DOMAIN } from "../../env"
+
+const BMap = window.BMap
 const CheckboxItem = Checkbox.CheckboxItem
-const RadioItem = Radio.RadioItem;
+const RadioItem = Radio.RadioItem
 const Item = List.Item
-const Brief = Item.Brief
 @connect(
   state => state,
   { getFriendsList },
@@ -42,32 +44,32 @@ export default class Posting extends Component {
       callUser: [],
       canSeeUserShow: false,
       callUserShow: false,
-      geolocationList:[]
+      geolocationList: [],
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getFriendsList()
-    Jsonp(`http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=23.134897,113.364139&output=json&pois=1&latest_admin=1&ak=3lsiXlu6QNbsf6NyECCK8sHHjEjS2Ejw&pois=1`,{
-      param:'callback'
-    },(err,response)=>{
-        //to-do
-        if(response.result){
-          console.log(response.result)
-          this.setState({
-            geolocationList:response.result.pois
-          })
-        }
+    Jsonp(`http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=23.134897,113.364139&output=json&pois=1&latest_admin=1&ak=3lsiXlu6QNbsf6NyECCK8sHHjEjS2Ejw&pois=1`, {
+      param: "callback",
+    }, (err, response) => {
+      //to-do
+      if (response.result) {
+        console.log(response.result)
+        this.setState({
+          geolocationList: response.result.pois,
+        })
+      }
     })
-// var map = new BMap.Map("l-map");      
-// // map.centerAndZoom(new BMap.Point(23.134897, 113.364139), 11);      
-// // 创建地理编码实例      
-// var myGeo = new BMap.Geocoder();      
-// // 根据坐标得到地址描述    
-// myGeo.getLocation(new BMap.Point(23.134897, 113.364139), function(result){      
-//     if (result){      
-//     console.log(result);      
-//     }      
+// var map = new BMap.Map("l-map");
+// // map.centerAndZoom(new BMap.Point(23.134897, 113.364139), 11);
+// // 创建地理编码实例
+// var myGeo = new BMap.Geocoder();
+// // 根据坐标得到地址描述
+// myGeo.getLocation(new BMap.Point(23.134897, 113.364139), function(result){
+//     if (result){
+//     console.log(result);
+//     }
 // })
 
   }
@@ -114,7 +116,7 @@ export default class Posting extends Component {
         url: "https://h1.ioliu.cn/bing/EarthHourNYC_ZH-CN5111448023_1920x1080.jpg",
       },
       {
-        url: "https://h1.ioliu.cn/bing/CoveSpires_ZH-CN2680932006_1920x1080.jpg",
+        url: "https://h1.ioliu.cn/bing/StMaryFalls_ZH-CN8917284967_1920x1080.jpg",
       },
       {
         url: "https://h1.ioliu.cn/bing/AurovilleIndia_ZH-CN4983141175_1920x1080.jpg",
@@ -134,23 +136,65 @@ export default class Posting extends Component {
       {
         url: "https://h1.ioliu.cn/bing/springequinox_ZH-CN1099430476_1920x1080.jpg",
       },
+      {
+        url: "https://h1.ioliu.cn/bing/LightHouseNS_ZH-CN9060766128_1920x1080.jpg",
+      },
+
     ]
     this.setState({
-      files: gallery.sort(() => 0.5 - Math.random()).slice(0, number),
+      files: this.state.files.concat(gallery.sort(() => 0.5 - Math.random()).slice(0, number)).slice(0, 9),
     })
   }
 
-  handlePosting () {
-    console.log(this.state)
-    axios.post("/user/posting", {
+  uploadFile = (blob) => {
+    return new Promise((resolve, reject) => {
+      axios.get("http://111.230.91.125:9000/api/uptoken").then((res) => {
+        let domain = res.data.domain
+        let token = res.data.uptoken
+        let config = {
+          useCdnDomain: true,
+          disableStatisticsReport: false,
+          retryCount: 6,
+          region: qiniu.region.z0,
+        }
+        let putExtra = {
+          fname: "",
+          params: {},
+          mimeType: null,
+        }
+        let key = new Date().getTime() + "moments"
+        let file = blob
+        let observable = qiniu.upload(file, key, token, putExtra, config)
+        let subscription = observable.subscribe((next) => {
+        }, (error) => {
+          Toast.error(error)
+          reject(error)
+        }, () => {
+          resolve({ url: `${QINIU_DOMAIN}${key}` })
+        })
+      })
+    })
+  }
+
+  async handlePosting () {
+    let uploadResult = this.state.files.map((item) => {
+      if (item.file) {
+        return this.uploadFile(item.file)
+      } else {
+        return item
+      }
+    })
+    let lastResult = await Promise.all(uploadResult)
+
+    await axios.post("/user/posting", {
       description: this.state.description,
       canSeeUser: this.state.canSeeUser,
       callUser: this.state.callUser,
       geolocation: this.state.geolocation,
-      imageLists: this.state.files,
+      imageLists: lastResult,
     }).then(res => {
-      console.log("res",res)
-      if(res.code===0){
+      console.log("res", res)
+      if (res.data.code === 0) {
         Toast.success("success")
         this.props.history.goBack()
       }
@@ -167,6 +211,7 @@ export default class Posting extends Component {
   }
 
   onFileChange = (files) => {
+    console.log(files)
     this.setState({
       files: files.length <= 9 ? files : files.slice(0, 9),
     })
@@ -197,25 +242,25 @@ export default class Posting extends Component {
     }
   }
 
-  onGeolocationCheckedChange(item){
+  onGeolocationCheckedChange (item) {
     this.setState({
-      geolocation:item
+      geolocation: item,
     })
   }
 
   showPosition = (position) => {
     this.setState({ loading: false })
-    console.log('tag', `纬度: ${position.coords.latitude} 经度:${position.coords.longitude}`)
+    console.log("tag", `纬度: ${position.coords.latitude} 经度:${position.coords.longitude}`)
     Toast.success(`纬度: ${position.coords.latitude} 经度:${position.coords.longitude}`)
-    Jsonp(`http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${position.coords.latitude},${position.coords.longitude}&output=json&pois=1&latest_admin=1&ak=3lsiXlu6QNbsf6NyECCK8sHHjEjS2Ejw&pois=1`,{
-      param:'callback'
-    },(err,response)=>{
-        //to-do
-        if(response.result){
-          this.setState({
-            geolocationList:response.result.pois
-          })
-        }
+    Jsonp(`http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${position.coords.latitude},${position.coords.longitude}&output=json&pois=1&latest_admin=1&ak=3lsiXlu6QNbsf6NyECCK8sHHjEjS2Ejw&pois=1`, {
+      param: "callback",
+    }, (err, response) => {
+      //to-do
+      if (response.result) {
+        this.setState({
+          geolocationList: response.result.pois,
+        })
+      }
     })
     // Jsonp(`http://apis.map.qq.com/ws/geocoder/v1/?location=${position.coords.latitude},${position.coords.longitude}&key=HDHBZ-HF5AF-AQ2JH-JKWQK-3M7Z7-2HFYT`,{
     //   param:'callback'
@@ -241,21 +286,21 @@ export default class Posting extends Component {
       geolocationDisable: true,
       loading: false,
     })
-    switch(error.code) {
+    switch (error.code) {
       case error.PERMISSION_DENIED:
-          Toast.fail("用户拒绝对获取地理位置的请求。", 2)
-          break;
+        Toast.fail("用户拒绝对获取地理位置的请求。", 2)
+        break
       case error.POSITION_UNAVAILABLE:
-          Toast.fail("位置信息是不可用的。", 2)
-          break;
+        Toast.fail("位置信息是不可用的。", 2)
+        break
       case error.TIMEOUT:
-          Toast.fail("请求用户地理位置超时。", 2)
-          break;
+        Toast.fail("请求用户地理位置超时。", 2)
+        break
       case error.UNKNOWN_ERROR:
-          Toast.fail("未知错误。", 2)
-          break;
-  }
-  console.log(error)
+        Toast.fail("未知错误。", 2)
+        break
+    }
+    console.log(error)
   }
 
   render () {
@@ -283,7 +328,7 @@ export default class Posting extends Component {
               onChange={this.onInputChange}
               rows={4}
             />
-            <Badge text="随机选图"
+            <Badge text="随机选图(最多9张)"
                    style={{
                      marginLeft: 12,
                      padding: "0 3px",
@@ -314,8 +359,8 @@ export default class Posting extends Component {
             <WhiteSpace></WhiteSpace>
             <List>
               <Item
-                thumb={<img style={{ width: 20, height: 20 }} 
-                        src={this.state.geolocation.name ?require("./../../components/img/local-active.png"):require("./../../components/img/local.png")} />}
+                thumb={<img style={{ width: 20, height: 20 }}
+                            src={this.state.geolocation.name ? require("./../../components/img/local-active.png") : require("./../../components/img/local.png")} />}
                 arrow="horizontal"
                 onClick={() => {this.getLocation()}}
               >
@@ -396,13 +441,13 @@ export default class Posting extends Component {
               })
             }
             {
-              (!this.state.callUserShow && !this.state.canSeeUserShow &&this.state.geolocationList.length > 0) && this.state.geolocationList.map((item) => {
+              (!this.state.callUserShow && !this.state.canSeeUserShow && this.state.geolocationList.length > 0) && this.state.geolocationList.map((item) => {
                 return (
                   <List key={item.uid}
                   >
                     <RadioItem
-                      key={item.uid} 
-                      checked={this.state.geolocation.uid === item.uid} 
+                      key={item.uid}
+                      checked={this.state.geolocation.uid === item.uid}
                       onChange={() => this.onGeolocationCheckedChange(item)}
                     >
                       {item.name}

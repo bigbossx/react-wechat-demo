@@ -20,6 +20,7 @@ export default class ChatWithRobot extends React.Component {
         { key: 0, label: "显示用户昵称", checked: true },
         { key: 1, label: "显示发送日期", checked: false },
       ],
+      showEmoji: false,
     }
     this.myRef = React.createRef()
   }
@@ -79,7 +80,7 @@ export default class ChatWithRobot extends React.Component {
   }
   onSelect = () => {
     this.setState({
-      showOptions: false,
+      popoverVisible: false,
     })
   }
 
@@ -214,7 +215,7 @@ export default class ChatWithRobot extends React.Component {
                     <div className="chat-content main-self">
                       {
                         this.state.showOptions[0].checked &&
-                        <span className="text-xs text-gray">用户名</span>
+                        <span className="text-xs text-gray">{user.userName}</span>
                       }
 
                       <div className="message-content triangle-right bg-self">
@@ -222,7 +223,7 @@ export default class ChatWithRobot extends React.Component {
                       </div>
                     </div>
                     <div className="chat-avatar">
-                      <img src={"http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
+                      <img src={user.avatar || "http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
                     </div>
                   </div>
                   {

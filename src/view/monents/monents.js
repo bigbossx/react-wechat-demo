@@ -1,13 +1,14 @@
 import React, { Component } from "react"
-import { Toast,Modal } from "antd-mobile"
+import { Toast, Modal, ActivityIndicator } from "antd-mobile"
 import { connect } from "react-redux"
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from "react-infinite-scroller"
 import PostPanel from "./../../components/postpanel"
-import { getPosting, getMorePosting,likeOrDislikePosting,commentPosting } from "./../../redex/monents.redux"
-const socialShare=window.socialShare
+import { getPosting, getMorePosting, likeOrDislikePosting, commentPosting } from "./../../redex/monents.redux"
+
+const socialShare = window.socialShare
 @connect(
   state => state,
-  { getPosting, getMorePosting,likeOrDislikePosting,commentPosting }
+  { getPosting, getMorePosting, likeOrDislikePosting, commentPosting },
 )
 export default class Monents extends Component {
 
@@ -15,26 +16,24 @@ export default class Monents extends Component {
     super(props)
     this.handleToPosting = this.handleToPosting.bind(this)
     this.handleGoBack = this.handleGoBack.bind(this)
-    this.state={
-      showCommentPanel:false,
-      showSharePanel:false,
-      commentType:"",
-      commentValue:"",
-      commentId:"",
-      replyId:"",
-      replyName:"",
-      page:1,
-      isLoading:true
+    this.state = {
+      showCommentPanel: false,
+      showSharePanel: false,
+      commentType: "",
+      commentValue: "",
+      commentId: "",
+      replyId: "",
+      replyName: "",
+      isLoading: true,
+      hasMoreItems: true,
     }
-    
-    this.commentRef = React.createRef();
+
+    this.commentRef = React.createRef()
   }
 
   componentDidMount () {
     this.props.getPosting(4)
-    this.setState({
-      isLoading:false
-    })
+
   }
 
   handleToPosting () {
@@ -45,94 +44,92 @@ export default class Monents extends Component {
     this.props.history.goBack()
   }
 
-  onEndReached=async ()=>{
-    
-    // await this.setState({
-    //   page:this.state.page+1,
-    //   isLoading:true
-    // })
-    //this.props.getMorePosting(this.state.page,4)
-    console.log("onEndReached")
+  onEndReached = async () => {
+    const { page } = this.props.monents
+    console.log("onEndReached", page)
+
+    this.props.getMorePosting(page + 1, 4)
+
   }
 
-  handleShowSharePanel= async (data)=>{
+  handleShowSharePanel = async (data) => {
     console.log(data)
     await this.setState({
-      showSharePanel:true
+      showSharePanel: true,
     })
     let $config = {
-      url                 : "", // 网址，默认使用 window.location.href
-      source              : '', // 来源（QQ空间会用到）, 默认读取head标签：<meta name="site" content="http://overtrue" />
-      title               : "data.title", // 标题，默认读取 document.title 或者 <meta name="title" content="share.js" />
-      origin              : '', // 分享 @ 相关 twitter 账号
-      description         : "data.description", // 描述, 默认读取head标签：<meta name="description" content="" />
-      image               : '', // 图片, 默认取网页中第一个img标签
+      url: "", // 网址，默认使用 window.location.href
+      source: "", // 来源（QQ空间会用到）, 默认读取head标签：<meta name="site" content="http://overtrue" />
+      title: "data.title", // 标题，默认读取 document.title 或者 <meta name="title" content="share.js" />
+      origin: "", // 分享 @ 相关 twitter 账号
+      description: "data.description", // 描述, 默认读取head标签：<meta name="description" content="" />
+      image: "", // 图片, 默认取网页中第一个img标签
       // sites               : ['qzone', 'qq', 'weibo','wechat', 'douban'], // 启用的站点
-      disabled            : ['google', 'facebook', 'twitter'], // 禁用的站点
-      wechatQrcodeTitle   : '微信扫一扫：分享', // 微信二维码提示文字
-      wechatQrcodeHelper  : '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
-    };
-    socialShare('.social-share-cs',$config);
-    
+      disabled: ["google", "facebook", "twitter"], // 禁用的站点
+      wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+      wechatQrcodeHelper: "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>",
+    }
+    socialShare(".social-share-cs", $config)
+
   }
 
-  handleShowComment=async (type,data)=>{
+  handleShowComment = async (type, data) => {
     console.log(data)
-    if(type==="comment"){
+    if (type === "comment") {
       await this.setState({
-        commentId:data.id,
-        commentType:type,
-        showCommentPanel:true
+        commentId: data.id,
+        commentType: type,
+        showCommentPanel: true,
       })
-    }else{
+    } else {
       await this.setState({
-        commentId:data.id,
-        replyId:data.replyId,
-        replyName:data.replyName,
-        commentType:type,
-        showCommentPanel:true
+        commentId: data.id,
+        replyId: data.replyId,
+        replyName: data.replyName,
+        commentType: type,
+        showCommentPanel: true,
       })
     }
-    
+
     this.commentRef.focus()
   }
 
-  handleLikeOrDislike=(postId)=>{
-    this.props.likeOrDislikePosting(postId,{userId:this.props.user._id,userName:this.props.user.userName})
+  handleLikeOrDislike = (postId) => {
+    this.props.likeOrDislikePosting(postId, { userId: this.props.user._id, userName: this.props.user.userName })
   }
 
-  handleComment=()=>{
-    if(this.state.commentType==="comment"){
-      this.props.commentPosting(this.state.commentId,{
-        commentId:this.props.user._id,
-        commentName:this.props.user.userName,
-        content:this.state.commentValue,
-        type:"comment"
+  handleComment = () => {
+    if (this.state.commentType === "comment") {
+      this.props.commentPosting(this.state.commentId, {
+        commentId: this.props.user._id,
+        commentName: this.props.user.userName,
+        content: this.state.commentValue,
+        type: "comment",
       })
-    }else{
-      this.props.commentPosting(this.state.commentId,{
-        commentId:this.props.user._id,
-        commentName:this.props.user.userName,
-        content:this.state.commentValue,
-        replyId:this.state.replyId,
-        replyName:this.state.replyName,
-        type:"reply"
+    } else {
+      this.props.commentPosting(this.state.commentId, {
+        commentId: this.props.user._id,
+        commentName: this.props.user.userName,
+        content: this.state.commentValue,
+        replyId: this.state.replyId,
+        replyName: this.state.replyName,
+        type: "reply",
       })
     }
     this.setState({
-      commentValue:"",
-      showCommentPanel:false
+      commentValue: "",
+      showCommentPanel: false,
     })
-    
+
   }
-  updateInput=(event)=>{
+  updateInput = (event) => {
     this.setState({
-      commentValue:event.target.value
+      commentValue: event.target.value,
     })
   }
 
   render () {
-    
+    const { page, totalPage } = this.props.monents
     return (
       <div style={{ background: "#fff" }}>
         <div className='cu-bar bg-black search fixed-header'>
@@ -156,53 +153,61 @@ export default class Monents extends Component {
         </div>
         <div>
           <InfiniteScroll
-              pageStart={1}
-              loadMore={this.onEndReached}
-              hasMore={!this.state.isLoading}
-              // loader={<div className="loader" key={0}>Loading ...</div>}
-            >   
-              {
-                this.props.monents.postingList.length>0 && this.props.monents.postingList.map((item,index)=>{
-                  return (
-                    <PostPanel 
-                      userInfo={this.props.user}
-                      data={item}
-                      key={index} 
-                      bindLikeOrDislike={(id)=>{this.handleLikeOrDislike(id)}}
-                      bindShareShow={(data)=>{this.handleShowSharePanel(data)}}
-                      bindCommentShow={(type,data)=>{this.handleShowComment(type,data)}}
-                    ></PostPanel>
-                  )
-                })
-              } 
+            pageStart={0}
+            loadMore={this.onEndReached}
+            initialLoad={false}
+            hasMore={page <= totalPage - 1}
+            loader={
+              <div className="loader" key={0}>
+                <ActivityIndicator size="large" />
+                <span style={{ marginTop: 10, color: "#bdc4ca" }}>加载中...</span>
+              </div>
+            }
+          >
+            {
+              this.props.monents.postingList.length > 0 && this.props.monents.postingList.map((item, index) => {
+                return (
+                  <PostPanel
+                    userInfo={this.props.user}
+                    data={item}
+                    length={this.props.monents.postingList.length}
+                    index={index}
+                    key={index}
+                    bindLikeOrDislike={(id) => {this.handleLikeOrDislike(id)}}
+                    bindShareShow={(data) => {this.handleShowSharePanel(data)}}
+                    bindCommentShow={(type, data) => {this.handleShowComment(type, data)}}
+                  ></PostPanel>
+                )
+              })
+            }
           </InfiniteScroll>
         </div>
         {
           this.state.showCommentPanel &&
           <div className='cu-bar input fixed-bottom'>
             <div className='action'>
-              <span className='cuIcon-roundclose text-grey' onClick={()=>{
+              <span className='cuIcon-roundclose text-grey' onClick={() => {
                 this.setState({
-                  showCommentPanel:false
+                  showCommentPanel: false,
                 })
               }}></span>
             </div>
-            <input 
-              className='solid-bottom' 
+            <input
+              className='solid-bottom'
               maxLength='300'
-              cursor-spacing='10' 
+              cursor-spacing='10'
               value={this.state.commentValue}
-              ref={(comment)=>this.commentRef=comment}
+              ref={(comment) => this.commentRef = comment}
               onChange={this.updateInput}
               placeholder={this.state.commentType}
-              onBlur={()=>{
+              onBlur={() => {
                 this.setState({
-                  showCommentPanel:false
+                  showCommentPanel: false,
                 })
               }}
-              onKeyDown={(e)=>{
-                if(e.keyCode === 13){
-                    this.handleComment()
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  this.handleComment()
                 }
               }}
             ></input>
@@ -211,16 +216,16 @@ export default class Monents extends Component {
         <Modal
           popup
           visible={this.state.showSharePanel}
-          onClose={()=>{
+          onClose={() => {
             this.setState({
-              showSharePanel:false
+              showSharePanel: false,
             })
           }}
           animationType="slide-up"
         >
           <div className='social-share-cs fixed-bottom custom-share-box'></div>
         </Modal>
-        
+
       </div>
     )
   }

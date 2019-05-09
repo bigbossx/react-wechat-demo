@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller';
 import VideoSensor from './videoSenor'
 import {fetchVideoData} from './../redex/video.redux'
+import { ActivityIndicator } from "antd-mobile"
 
 @connect(
   state=>state,
@@ -15,7 +16,7 @@ export default class video extends Component {
     this.state = {
       isLoading: true,
     };
-    
+
   }
 
   componentDidMount() {
@@ -45,10 +46,10 @@ export default class video extends Component {
     }, 1000);
   }
 
- 
+
 
   render() {
-    console.log(this.props)
+    const {page,totalPage}=this.props.video
     const {videoList}=this.props.video
     const separator = (index) => (
       <div
@@ -69,10 +70,16 @@ export default class video extends Component {
         });
     return (
       <InfiniteScroll
-          pageStart={0}
-          loadMore={this.onEndReached}
-          hasMore={true}
-          // loader={<div className="loader" key={0}>Loading ...</div>}
+        pageStart={0}
+        loadMore={this.onEndReached}
+        initialLoad={false}
+        hasMore={page <= totalPage - 1}
+        loader={
+          <div className="loader" key={0}>
+            <ActivityIndicator size="large" />
+            <span style={{ marginTop: 10, color: "#bdc4ca" }}>加载中...</span>
+          </div>
+        }
       >
           {
             renderItems

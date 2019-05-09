@@ -16,7 +16,7 @@ export default class Userinfo extends React.Component{
         if(publicList.indexOf(pathName)>-1){
             return null
         }
-        
+
         if(!this.props.user){
             console.log("______________user undefind__________")
            // Toast.offline('请登录!!!', 0);
@@ -34,9 +34,8 @@ export default class Userinfo extends React.Component{
                 }
             }
         })
-        console.log('userInfo',this.props)
     }
-    
+
     render(){
         return (
             null

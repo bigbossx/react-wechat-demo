@@ -1,42 +1,40 @@
-import React from "react"
-import io from "socket.io-client"
-import { List, InputItem, Button, NavBar, Icon, Grid, Toast, Popover, Checkbox } from "antd-mobile"
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import { loadUserInfo } from "./../redex/user.redux"
-import { getMsgList, sendMsg, getMsg, readMsg } from "./../redex/chat.redux"
+import {
+  sendAddGroup,
+  getAddGroup,
+  sendGroupChatMsg,
+  getGroupChatMsg,
+  getGroupMsgList,
+} from "./../redex/groupChat.redux"
+import { Button, Checkbox, Grid, Icon, InputItem, List, Modal, NavBar, Popover } from "antd-mobile"
 const CheckboxItem = Checkbox.CheckboxItem
-const socket = io("ws://127.0.0.1:8081")
 @connect(
   state => state,
-  { getMsgList, sendMsg, getMsg, readMsg, loadUserInfo },
+  { sendAddGroup, getAddGroup, sendGroupChatMsg, getGroupChatMsg, getGroupMsgList },
 )
-export default class Chat extends React.Component {
+class GroupChat extends Component {
+
   constructor (props) {
     super(props)
     this.state = {
       text: "",
       msg: [],
       showOptions: [
-        { key: 0, label: "显示发送日期", checked: false },
+        { key: 0, label: "显示用户昵称", checked: true },
+        { key: 1, label: "显示发送日期", checked: false },
       ],
-      popoverVisible:false,
-      showEmoji:false
+      popoverVisible: false,
+      showEmoji: false,
     }
     this.myRef = React.createRef()
   }
 
-  componentWillMount () {
-    if (!this.props.chat.chatMsg.length) {
-      this.props.getMsgList()
-    }
-  }
-
   componentDidMount () {
-    if (!this.props.chat.chatMsg.length) {
-      this.props.getMsg()
-
+    if (!this.props.groupchat.chatMsg.length) {
+      this.props.getGroupMsgList()
+      this.props.getGroupChatMsg()
     }
-
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"))
     }, 0)
@@ -46,21 +44,17 @@ export default class Chat extends React.Component {
         window.scrollTo(0, this.myRef.current.clientHeight)
       }
     }, 1000)
+    // this.props.sendAddGroup({ userName, _id, avatar })
+    // this.props.getAddGroup()
+
   }
 
   componentDidUpdate () {
-
     setTimeout(() => {
       if (this.myRef.current) {
         window.scrollTo(0, this.myRef.current.clientHeight)
       }
     }, 1000)
-
-  }
-
-  componentWillUnmount () {
-    const to = this.props.match.params.userName
-    this.props.readMsg(to)
   }
 
   optionsChange = (key) => {
@@ -76,11 +70,15 @@ export default class Chat extends React.Component {
   }
 
   handleSubmit () {
-
-    const from = this.props.user._id
-    const to = this.props.match.params.userName
-    const msg = this.state.text
-    this.props.sendMsg({ from, to, msg })
+    const {userName,_id,avatar}=this.props.user
+    this.props.sendGroupChatMsg({
+      content:this.state.text,
+      contentType:"text",
+      userName,
+      userId:_id,
+      groupId:"vision-group-chat-1",
+      avatar
+    })
     this.setState({
       text: "",
       showEmoji: false,
@@ -90,25 +88,20 @@ export default class Chat extends React.Component {
 
   render () {
     const emoji = "😁 😂 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😜 😝 😒 😓 😔 😰 😱 😳 😵 😡 😠 😲 😷 😖 😞 🍇 🍈 🍉 🍊 🍌 🍎 🍏 🍑 🍒 🍓 🍅 🍆 🌽 🍄 🌰 🍞 🍖 🍗 🍔 🍟 🍕 🍳 🍲 🍱 🍘 🍙 🍚 🍛 🍜 🍝 🍠 🍢 🍣 🍤 🍥 🍡 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🍫 🍬 🍭 🍮 🍯 ☕ 🍵 🍶 🍷 🍸 🍹 🍺 🍻 🍴".split(" ").filter(v => v).map(v => ({ text: v }))
-    const me = this.props.match.params.userName
-    const userInfo = this.props.chat.userInfo
-    if (!me || !(userInfo[me] && userInfo[me].name)) {
-      return false
-    }
-    const currentChatId = [me, this.props.user._id].sort().join("_")
-    const filterChatMsg = this.props.chat.chatMsg.filter(v => v.chatId == currentChatId)
 
+    const { user, groupchat } = this.props
     const formatTimeStamp=(timeStamp)=>{
       return new Date(timeStamp).toLocaleDateString()+" "+new Date(timeStamp).toLocaleTimeString()
     }
-
     return (
       <div id="chat-page">
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
           className="fixed-header"
-          onLeftClick={() => {this.props.history.goBack()}}
+          onLeftClick={() => {
+            this.props.history.goBack()
+          }}
           rightContent={
             <Popover mask
                      overlayClassName="fortest"
@@ -142,41 +135,52 @@ export default class Chat extends React.Component {
               </div>
             </Popover>
           }
-        >{userInfo[me].name}</NavBar>
+        >群聊室1</NavBar>
         <div style={{ marginBottom: 45, marginTop: 45 }} ref={this.myRef}>
           {
-            filterChatMsg.sort((a, b) => a.create_time - b.create_time).map(v => {
-              return v.from == me ? (
+            groupchat.chatMsg.length > 0 && groupchat.chatMsg.map(v => {
+              return v.userId !== user._id ? (
                 <div className="chat-container" key={v.create_time}>
                   <div className="chat-main">
                     <div className="chat-avatar">
-                      <img src={userInfo[v.from].avatar||"http://pqgrbj9dn.bkt.clouddn.com/robot.png"} />
+                      <img src={v.avatar||"http://pqgrbj9dn.bkt.clouddn.com/robot.png"} />
                     </div>
                     <div className="chat-content main-other">
+                      {
+                        this.state.showOptions[0].checked &&
+                        <span className="text-xs text-gray">{v.userName}</span>
+                      }
+
                       <div className="message-content triangle-left bg-other">
                         <span className="text-df">{v.content}</span>
                       </div>
                     </div>
                   </div>
                   {
-                    this.state.showOptions[0].checked &&
+                    this.state.showOptions[1].checked &&
                     <div className="chat-date text-xs">{formatTimeStamp(v.create_time)}</div>
                   }
                 </div>
+
               ) : (
                 <div className="chat-container chat-self" key={v.create_time}>
                   <div className="chat-main">
                     <div className="chat-content main-self">
+                      {
+                        this.state.showOptions[0].checked &&
+                        <span className="text-xs text-gray">{user.userName}</span>
+                      }
+
                       <div className="message-content triangle-right bg-self">
                         <span className="text-df">{v.content}</span>
                       </div>
                     </div>
                     <div className="chat-avatar">
-                      <img src={userInfo[v.from].avatar||"http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
+                      <img src={v.avatar || "http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
                     </div>
                   </div>
                   {
-                    this.state.showOptions[0].checked &&
+                    this.state.showOptions[1].checked &&
                     <div className="chat-date text-xs">{formatTimeStamp(v.create_time)}</div>
                   }
                 </div>
@@ -194,17 +198,16 @@ export default class Chat extends React.Component {
                   text: v,
                 })
               }}
-              onKeyPress={(e) => {
-                if (e.charCode === 13) {
-                  this.handleSubmit()
-                }
-              }}
               onFocus={() => {
                 this.setState({
                   showEmoji: false,
                 })
               }}
-              onVirtualKeyboardConfirm={() => this.handleSubmit()}
+              onKeyPress={(e) => {
+                if (e.charCode === 13) {
+                  this.handleSubmit()
+                }
+              }}
               extra={
                 <div className='emoji'>
                                     <span style={{ marginRight: 10, fontSize: 20 }}
@@ -246,3 +249,5 @@ export default class Chat extends React.Component {
     )
   }
 }
+
+export default GroupChat

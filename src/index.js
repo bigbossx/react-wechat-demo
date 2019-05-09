@@ -26,6 +26,7 @@ import Posting from './view/posting/posting'
 import RobotChat from './components/chatWithRobot'
 import Monents from './view/monents/monents'
 import createHistory from 'history/createHashHistory'
+import GroupChat from './components/groupChat'
 import NoMatch from './components/nomatch'
 const history = createHistory()
 const store = createStore(reduxCombine, applyMiddleware(thunk))
@@ -41,6 +42,7 @@ ReactDOM.render(
           <Route path='/login' component={Login}></Route>
           <Route path='/chat/:userName' component={Chat}></Route>
           <Route path='/robot/' component={RobotChat}></Route>
+          <Route path='/groupchat/' component={GroupChat}></Route>
           <Route path='/editinfo' component={EditInfo}></Route>
           <Route path='/search' component={Search}></Route>
           <Route path='/posting' component={Posting}></Route>

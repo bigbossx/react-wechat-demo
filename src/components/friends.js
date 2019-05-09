@@ -1,5 +1,4 @@
 import React from "react"
-import axios from "axios"
 import { Card, WhiteSpace, WingBlank, List, Toast, ActionSheet, Button, Badge, Modal } from "antd-mobile"
 import { connect } from "react-redux"
 import { getFriendsList, getAddRequest, getAddRequestList, ignoreRequest, delfriend } from "../redex/friends.redux"
@@ -31,6 +30,7 @@ export default class Friends extends React.Component {
   }
 
   showActionSheet = (v) => {
+    console.log(v)
     const BUTTONS = ["发起聊天", "删除好友", "关闭"]
     ActionSheet.showActionSheetWithOptions({
         options: BUTTONS,
@@ -41,7 +41,7 @@ export default class Friends extends React.Component {
       },
       (buttonIndex) => {
         if (BUTTONS[buttonIndex] == "发起聊天") {
-          this.props.history.push(`/chat/${v.userId}`)
+          this.props.history.push(`/chat/${v._id}`)
         }
         if (BUTTONS[buttonIndex] == "删除好友") {
           //todo
@@ -52,7 +52,7 @@ export default class Friends extends React.Component {
             {
               text: "确认",
               onPress: () => {
-                this.props.delfriend(v.userId)
+                this.props.delfriend(v._id)
               },
             },
           ])
@@ -61,10 +61,7 @@ export default class Friends extends React.Component {
   }
 
   render () {
-    const Header = Card.Header
-    const Body = Card.Body
     const Item = List.Item
-    const Brief = Item.Brief
     return (
       <div>
         <List>
@@ -84,7 +81,7 @@ export default class Friends extends React.Component {
           <Item
             thumb={require(`./img/group-chat.png`)}
             arrow="horizontal"
-            onClick={() => {Toast.info("敬请期待", 2)}}
+            onClick={() => {this.props.history.push("/groupchat")}}
           >
             群聊
           </Item>

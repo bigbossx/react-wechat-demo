@@ -44,7 +44,7 @@ export default class Message extends React.Component{
                             return(
                                 <Item
                                     extra={<Badge text={unreadNum}></Badge>}
-                                    thumb={require(`./img/${this.props.chat.userInfo[targetId].avatar}`)}
+                                    thumb={`${this.props.chat.userInfo[targetId].avatar}`}
                                     key={v[v.length-1]._id}
                                     onClick={()=>{
                                         this.props.history.push(`/chat/${targetId}`)
