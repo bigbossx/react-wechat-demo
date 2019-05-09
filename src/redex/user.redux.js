@@ -51,27 +51,7 @@ export function loadUserInfo(userInfo){
 export function logoutSubmit(){
     return {type:LOGOUT}
 }
-//提交登录的redux
-export function login({userName,pwd}){
-    if(!userName||!pwd){
-        Toast.fail('请输入用户名与密码!', 1);
-        return errorMsg('用命名与密码必须输入')
-    }
-    return dispatch=>{
-        axios.post('/user/login',
-            {pwd,userName}
-        ).then((res)=>{
-            if(res.status==200&&res.data.code==0){
-                Toast.success('登录成功!', 1,()=>{
-                    dispatch(loginSuccess(res.data.data))
-                });
-            }else{
-                Toast.fail('用户名或密码错误!', 3);
-                dispatch(errorMsg(res.data.msg))
-            }
-        })
-    }
-}
+
 //提交修改
 export function edit(avatar,sex,title,address,desc){
     return dispatch=>{
@@ -89,6 +69,28 @@ export function edit(avatar,sex,title,address,desc){
         })
     }
 }
+//提交登录的redux
+export function login({userName,pwd}){
+    if(!userName||!pwd){
+        Toast.fail('请输入用户名与密码!', 1);
+        return errorMsg('用命名与密码必须输入')
+    }
+    return dispatch=>{
+        axios.post('/user/login',
+          {pwd,userName}
+        ).then((res)=>{
+            if(res.status==200&&res.data.code==0){
+                Toast.success('登录成功!', 1,()=>{
+                    dispatch(loginSuccess(res.data.data))
+                });
+            }else{
+                Toast.fail('用户名或密码错误!', 3);
+                dispatch(errorMsg(res.data.msg))
+            }
+        })
+    }
+}
+
 //提交注册的redux
 export function register({userName,pwd,repeatpwd}){
     if(!userName||!pwd){
@@ -105,12 +107,12 @@ export function register({userName,pwd,repeatpwd}){
         ).then((res)=>{
             if(res.status==200){
                 if(res.data.code==0){
-                    Toast.success('注册成功!', 1,()=>{  
+                    Toast.success('注册成功!', 1,()=>{
                         dispatch(registerSuccess({pwd,userName}))
                     });
                 }else{
                     Toast.fail('用户名已存在!', 3);
-                }   
+                }
             }else{
                 Toast.fail('注册异常，请重新操作!', 3);
                 dispatch(errorMsg(res.data.msg))

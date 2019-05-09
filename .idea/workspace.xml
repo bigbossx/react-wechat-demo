@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3e668ff-bcb7-4b36-a611-e072755d78d9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/server/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/postpanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/postpanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redex/user.redux.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redex/user.redux.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,10 +23,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/view/home/home.js">
+        <entry file="file://$PROJECT_DIR$/src/redex/user.redux.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="14" selection-start-line="14" selection-end-line="17" selection-end-column="1" />
+            <state relative-caret-position="600">
+              <caret line="41" column="26" selection-start-line="41" selection-start-column="26" selection-end-line="41" selection-end-column="26" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -30,23 +34,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/index.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2187">
-              <caret line="410" column="21" lean-forward="true" selection-start-line="410" selection-start-column="21" selection-end-line="410" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/view/posting/posting.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="45" column="30" selection-start-line="45" selection-start-column="30" selection-end-line="45" selection-end-column="30" />
+            <state relative-caret-position="713">
+              <caret line="161" column="29" selection-start-line="161" selection-start-column="29" selection-end-line="161" selection-end-column="29" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
-                <element signature="e#711#2853#0" />
+                <element signature="e#1944#4086#0" />
               </folding>
             </state>
           </provider>
@@ -55,8 +50,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/monents/monents.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+            <state relative-caret-position="720">
+              <caret line="53" column="16" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="50" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -65,13 +60,28 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/redex/monents.redux.js">
+        <entry file="file://$PROJECT_DIR$/src/components/postpanel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="15">
+              <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="810">
+              <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -79,7 +89,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/redex/friends.redux.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
+            <state relative-caret-position="360">
               <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="45" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
@@ -89,19 +99,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/server.js">
+        <entry file="file://$PROJECT_DIR$/src/components/video.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="683">
-              <caret line="46" column="4" lean-forward="true" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
+            <state>
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server/model.js">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/search.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
+            <state relative-caret-position="540">
+              <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -109,8 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
-              <caret line="57" column="22" selection-start-line="57" selection-start-column="15" selection-end-line="57" selection-end-column="22" />
+            <state relative-caret-position="5310">
+              <caret line="354" column="13" selection-start-line="354" selection-start-column="10" selection-end-line="354" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -158,12 +173,14 @@
         <option value="$PROJECT_DIR$/src/view/monents/monents.js" />
         <option value="$PROJECT_DIR$/server/user.js" />
         <option value="$PROJECT_DIR$/server/model.js" />
+        <option value="$PROJECT_DIR$/src/components/postpanel.js" />
+        <option value="$PROJECT_DIR$/src/redex/user.redux.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="89" />
-    <option name="y" value="42" />
+    <option name="x" value="3" />
+    <option name="y" value="44" />
     <option name="width" value="2045" />
     <option name="height" value="1028" />
   </component>
@@ -172,13 +189,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="react-wechat-demo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="react-wechat-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
@@ -194,6 +215,12 @@
               <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="react-wechat-demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="react-wechat-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="redex" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -202,10 +229,18 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="view" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="react-wechat-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="react-wechat-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="posting" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -243,15 +278,17 @@
       <workItem from="1556070148001" duration="19882000" />
       <workItem from="1556156007374" duration="9148000" />
       <workItem from="1556247080561" duration="18158000" />
+      <workItem from="1557020952826" duration="10737000" />
+      <workItem from="1557191532133" duration="612000" />
+      <workItem from="1557277579978" duration="532000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65834000" />
+    <option name="totallyTimeSpent" value="77832000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="89" y="42" width="2045" height="1028" extended-state="0" />
-    <editor active="true" />
+    <frame x="3" y="44" width="2045" height="1028" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24950592" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -323,35 +360,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/postpanel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redex/chat.redux.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-370">
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/uerinfo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="6" column="11" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/redex/video.redux.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -378,26 +386,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/search.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="626">
-          <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/chat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="80" column="18" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/message.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -408,44 +396,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
-          <caret line="132" column="1" selection-start-line="132" selection-start-column="1" selection-end-line="132" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/editinfo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1185">
-          <caret line="84" column="32" lean-forward="true" selection-start-line="84" selection-start-column="32" selection-end-line="84" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/style/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58920">
           <caret line="3928" column="8" selection-start-line="3928" selection-start-column="1" selection-end-line="3928" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="28" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -460,16 +414,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/chatWithRobot.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="611">
-          <caret line="224" column="33" selection-start-line="224" selection-start-column="33" selection-end-line="224" selection-end-column="77" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/friends.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="277">
@@ -477,13 +421,6 @@
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2187">
-          <caret line="410" column="21" lean-forward="true" selection-start-line="410" selection-start-column="21" selection-end-line="410" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -496,23 +433,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="683">
-          <caret line="46" column="4" lean-forward="true" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/home/home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="14" selection-start-line="14" selection-end-line="17" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/redex/counter.redux.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -520,20 +440,121 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redex/friends.redux.js">
+    <entry file="file://$PROJECT_DIR$/src/view/home/home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="45" />
+        <state relative-caret-position="45">
+          <caret line="14" selection-start-line="14" selection-end-line="17" selection-end-column="1" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6150">
+          <caret line="440" column="21" selection-start-line="440" selection-start-column="21" selection-end-line="440" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/redex/monents.redux.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
+        <state relative-caret-position="780">
+          <caret line="53" column="1" selection-start-line="53" selection-start-column="1" selection-end-line="53" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="739">
+          <caret line="53" column="7" lean-forward="true" selection-start-line="53" selection-start-column="7" selection-end-line="53" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/uerinfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/chatWithRobot.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="210" column="19" lean-forward="true" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/editinfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="53" column="20" lean-forward="true" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redex/chat.redux.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="60" column="50" lean-forward="true" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/chat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="80" column="18" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/videoSenor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="30" lean-forward="true" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="43" column="65" lean-forward="true" selection-start-line="43" selection-start-column="65" selection-end-line="43" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redex/user.redux.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="41" column="26" selection-start-line="41" selection-start-column="26" selection-end-line="41" selection-end-column="26" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -542,36 +563,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/monents/monents.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+        <state relative-caret-position="720">
+          <caret line="53" column="16" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="50" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/posting/posting.js">
+    <entry file="file://$PROJECT_DIR$/src/components/postpanel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="45" column="30" selection-start-line="45" selection-start-column="30" selection-end-line="45" selection-end-column="30" />
+        <state relative-caret-position="15">
+          <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redex/friends.redux.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/video.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
             <element signature="e#0#40#0" expanded="true" />
-            <element signature="e#711#2853#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/search.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="22" selection-start-line="57" selection-start-column="15" selection-end-line="57" selection-end-column="22" />
+        <state relative-caret-position="5310">
+          <caret line="354" column="13" selection-start-line="354" selection-start-column="10" selection-end-line="354" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/model.js">
+    <entry file="file://$PROJECT_DIR$/src/view/posting/posting.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
+        <state relative-caret-position="713">
+          <caret line="161" column="29" selection-start-line="161" selection-start-column="29" selection-end-line="161" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#1944#4086#0" />
+          </folding>
         </state>
       </provider>
     </entry>

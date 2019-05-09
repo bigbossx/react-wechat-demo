@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Lightbox from 'react-images'
 import { Flex,ActionSheet } from 'antd-mobile'
 export default class PostPanel extends Component {
-  
+
   constructor(props){
     super(props)
     this.state={
@@ -109,11 +109,11 @@ export default class PostPanel extends Component {
     return (
       <div className='post-container'>
         <div className='post-avatar'>
-          <img src={data.userInfo[0].avatar} />
+          <img src={data.userInfo[0]&&data.userInfo[0].avatar||"http://pqgrbj9dn.bkt.clouddn.com/default.png"} />
         </div>
         <div className='post-main'>
           <div className='post-main-header'>
-            <span className='post-main-header-username text-wechat text-bold text-xl'>{data.userInfo[0].userName}</span>
+            <span className='post-main-header-username text-wechat text-bold text-xl'>{data.userInfo[0]&&data.userInfo[0].userName||"未知"}</span>
             <i className='text-gray cuIcon-lock text-xl'></i>
           </div>
           <div className='post-main-description text-lg'>
@@ -128,7 +128,7 @@ export default class PostPanel extends Component {
                 <span className='cuIcon-likefill text-red text-lg' onClick={()=>{this.handleClickLikeOrDislike(data._id)}}></span>:
                 <span className='cuIcon-like text-lg' onClick={()=>{this.handleClickLikeOrDislike(data._id)}}></span>
               }
-              
+
               <span className='cuIcon-comment text-lg' onClick={()=>{this.handleClickComment("comment",{id:data._id})}} style={{margin:"0 15px"}}></span>
               <span className='cuIcon-share text-lg' onClick={()=>{this.handleClickShare("share")}}></span>
             </div>
@@ -145,15 +145,15 @@ export default class PostPanel extends Component {
                         )
                       })
                     }
-                  </div> 
+                  </div>
               }
-            
+
               {
                 data.comment.length>0&&
                   <div className='commit-container text-df'>
                   {
                     data.comment.map((item,index)=>{
-              
+
                       if(item.type==="comment"){
                         return (
                           <div className='commit-item' key={index} onClick={()=>{
@@ -175,7 +175,7 @@ export default class PostPanel extends Component {
                           </div>
                         )
                       }
-                    
+
                     })
                   }
                   </div>
@@ -190,7 +190,7 @@ export default class PostPanel extends Component {
           currentImage={this.state.currentPreviewIndex}
           onClickPrev={this.gotoPrevLightboxImage}
           onClickNext={this.gotoNextLightboxImage}
-          onClose={this.closeLightbox} 
+          onClose={this.closeLightbox}
         />
       </div>
     )
