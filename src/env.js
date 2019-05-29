@@ -1,1 +1,1 @@
-export const QINIU_DOMAIN = 'http://pqgrbj9dn.bkt.clouddn.com/'
+export const QINIU_DOMAIN = 'http://ps9xnh2zj.bkt.clouddn.com/'

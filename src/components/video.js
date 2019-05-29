@@ -24,7 +24,7 @@ export default class video extends Component {
     // setTimeout(() => this.lv.scrollTo(0, 120), 800);
 
     // simulate initial Ajax
-    this.props.fetchVideoData()
+    this.props.fetchVideoData(1,5)
   }
 
   // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
@@ -38,12 +38,11 @@ export default class video extends Component {
   onEndReached = (event) => {
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
+    const { page } = this.props.video
     console.log("onEndReached")
     if (this.state.isLoading && !this.state.hasMore) {
-      return;
+      this.props.fetchVideoData(page+1,5)
     }
-    setTimeout(() => {
-    }, 1000);
   }
 
 

@@ -34,8 +34,22 @@ export default class VideoSenor extends React.Component{
     pause() {
         this.refs.player.pause();
     }
+    
     render(){
         const {data}=this.props
+        const entityToString=(entity)=>{
+          let entities=entity.split(';')
+          entities.pop()
+          let tmp=''
+          for(let i=0;i<entities.length;i++){
+            let num=entities[i].trim().slice(2)
+            if(num[0]==='x')//10进制还是16进制
+              num=parseInt(num.slice(1),16);
+            else num=parseInt(num);
+            tmp+=String.fromCharCode(num)
+          }
+          return tmp
+        }
         return (
             <VisibilitySensor 
                 minTopValue={50}
@@ -43,7 +57,7 @@ export default class VideoSenor extends React.Component{
             >
               <div style={{position:"relative"}}>
                 {
-                    !this.state.isVisible?<div className="video-layout"></div>:null
+                    // !this.state.isVisible?<div className="video-layout"></div>:null
                 }
                 <Card full>
                   <Card.Header

@@ -159,7 +159,7 @@ Router.post("/commentPosting", (req, res) => {
 Router.get("/video", (req, res) => {
   const { page, pageNumber } = req.query
   let totalPage = 0
-  Moments.count({}, function (error, count) {
+  Video.count({}, function (error, count) {
     console.log(count)
     totalPage = Math.ceil(count / pageNumber)
   })
